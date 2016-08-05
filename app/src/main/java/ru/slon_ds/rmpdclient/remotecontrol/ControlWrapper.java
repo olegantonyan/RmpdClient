@@ -1,12 +1,16 @@
 package ru.slon_ds.rmpdclient.remotecontrol;
 
 import java.net.MalformedURLException;
+import java.util.HashMap;
 import java.util.Locale;
 
 import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class ControlWrapper extends Thread {
-    public ControlWrapper() {
+    private OnMessageCallback callback = null;
+
+    public ControlWrapper(OnMessageCallback callback) {
+        this.callback = callback;
         start();
     }
 
@@ -27,17 +31,20 @@ public class ControlWrapper extends Thread {
                 String.format(Locale.US, "sending message (%s|%d): %s", queued ? "queued" : "immed", sequence_number, message.toString()));
         boolean result = false;
         MessageQueue mq = mq();
-        if (queued) {
-            MessageQueue.EnqueuedData data = mq.new EnqueuedData(message, sequence_number);
-            result = mq.enqueue(data);
-        } else {
-            HttpClient client = http_client();
-            if (client != null) {
-                result = client.send(message, sequence_number);
-                if (!result) {
-                    // log error with counter
+        try {
+            if (queued) {
+                MessageQueue.EnqueuedData data = mq.new EnqueuedData(message, sequence_number);
+                result = mq.enqueue(data);
+            } else {
+                HttpClient client = http_client();
+                if (client != null) {
+                    HttpClient.HttpData received = client.send(message, sequence_number);
+                    onreceive(received.data, received.sequence_number);
+                    result = true;
                 }
             }
+        } catch (Throwable e) {
+            Logger.exception(this, "error sending message '" + message.toString() + "'", e);
         }
         return result;
     }
@@ -50,10 +57,13 @@ public class ControlWrapper extends Thread {
 
                 OutgoingMessage m = new OutgoingMessage();
                 m.put("ihate", "you");
-                m.put("hello", "world");
-                if (send(m, true, 0)) {
+                HashMap<String, String> h = new HashMap<String, String>();
+                h.put("nope", "rwerwe");
+                h.put("ffff", "uuuuu");
+                m.put("hello", h);
+               /* if (send(m, true, 0)) {
 
-                }
+                }*/
 
 
                 MessageQueue.DequeueResult dequeued = mq.dequeue();
@@ -83,10 +93,17 @@ public class ControlWrapper extends Thread {
 
     private HttpClient http_client() {
         try {
-            return new HttpClient("http://192.168.1.3:3000", "android", "android");
+            return new HttpClient("http://10.0.2.2:3000", "android", "12345678");
         } catch (MalformedURLException e) {
             Logger.exception(this, "error creating http client", e);
             return null;
+        }
+    }
+
+    private void onreceive(IncomingMessage msg, Integer sequence_number) {
+        Logger.debug(this, "received message: " + msg.toString());
+        if (callback != null) {
+            callback.onmessage(msg, sequence_number);
         }
     }
 }
