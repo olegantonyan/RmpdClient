@@ -25,11 +25,11 @@ public class HttpClient {
         this.password = password;
     }
 
-    public boolean send(CharSequence msg, Integer seq) {
+    public boolean send(OutgoingMessage msg, Integer seq) {
         try {
-            request(new HttpData());
+           // request(new HttpData());
         } catch (Exception e) {
-            Log.e("bb", "assdf");
+           // Log.e("bb", "assdf");
         }
         return true;
     }
