@@ -72,7 +72,7 @@ public class ControlWrapper extends Thread {
             }
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 Logger.warning(this, "interrupted");
                 break;
