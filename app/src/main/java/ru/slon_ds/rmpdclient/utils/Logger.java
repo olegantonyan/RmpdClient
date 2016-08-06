@@ -2,6 +2,8 @@ package ru.slon_ds.rmpdclient.utils;
 
 import android.util.Log;
 
+import ru.slon_ds.rmpdclient.AndroidApplication;
+
 public class Logger {
     private static final String ANDROID_LOG_TAG = "rmpd_client";
 
@@ -26,6 +28,6 @@ public class Logger {
     }
 
     private static String tag(Object source) {
-        return source.getClass().getName();
+        return source.getClass().getName().replace(AndroidApplication.getAppContext().getPackageName(), "");
     }
 }
