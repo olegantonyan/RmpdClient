@@ -14,6 +14,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import ru.slon_ds.rmpdclient.AndroidApplication;
+
 public class HttpClient {
     private URL server_url;
     private String login;
@@ -35,6 +37,7 @@ public class HttpClient {
         connection.setDoOutput(true);
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("User-Agent", AndroidApplication.user_agent());
         OutputStream os = connection.getOutputStream();
         os.write(msg.toString().getBytes());
         os.flush();

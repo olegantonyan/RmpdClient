@@ -9,6 +9,10 @@ import ru.slon_ds.rmpdclient.utils.Logger;
 public class ControlWrapper extends Thread {
     private OnMessageCallback callback = null;
 
+    interface OnMessageCallback {
+        void onmessage(IncomingMessage msg, Integer seq);
+    }
+
     public ControlWrapper(OnMessageCallback callback) {
         this.callback = callback;
         start();
@@ -27,6 +31,9 @@ public class ControlWrapper extends Thread {
     }
 
     public boolean send(OutgoingMessage message, boolean queued, Integer sequence_number) {
+        if (message == null) {
+            return false;
+        }
         Logger.debug(this,
                 String.format(Locale.US, "sending message (%s|%d): %s", queued ? "queued" : "immed", sequence_number, message.toString()));
         boolean result = false;

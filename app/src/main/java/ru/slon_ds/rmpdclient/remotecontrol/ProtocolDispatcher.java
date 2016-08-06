@@ -3,7 +3,7 @@ package ru.slon_ds.rmpdclient.remotecontrol;
 import ru.slon_ds.rmpdclient.remotecontrol.protocol.Sender;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
-public class ProtocolDispatcher implements OnMessageCallback {
+public class ProtocolDispatcher implements ControlWrapper.OnMessageCallback {
     private static ProtocolDispatcher instance = null;
     private ControlWrapper control_wrapper = null;
 

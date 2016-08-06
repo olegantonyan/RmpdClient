@@ -9,4 +9,10 @@ public class Support {
         }
         return result;
     }
+
+    public static String camelcase_to_underscore(String camel_case) {
+        String regex = "([a-z])([A-Z]+)";
+        String replacement = "$1_$2";
+        return camel_case.replaceAll(regex, replacement).toLowerCase();
+    }
 }
