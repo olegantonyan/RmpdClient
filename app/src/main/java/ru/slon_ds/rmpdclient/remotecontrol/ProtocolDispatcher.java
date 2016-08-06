@@ -44,6 +44,6 @@ public class ProtocolDispatcher implements ControlWrapper.OnMessageCallback {
     }
 
     public boolean send(String command_type) {
-        return send(command_type, null);
+        return send(command_type, new KWargs());
     }
 }
