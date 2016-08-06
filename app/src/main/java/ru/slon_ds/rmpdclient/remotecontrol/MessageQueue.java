@@ -53,7 +53,7 @@ public class MessageQueue extends SQLiteOpenHelper {
             contentValues.put("created_at", current_time_utc());
             db.insert("message_queue", null, contentValues);
             return true;
-        } catch (Throwable e) {
+        } catch (Exception e) {
             Logger.exception(this, "enqueue error", e);
             return false;
         }

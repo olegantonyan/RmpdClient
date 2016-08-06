@@ -1,6 +1,8 @@
 package ru.slon_ds.rmpdclient.remotecontrol;
 
+import ru.slon_ds.rmpdclient.remotecontrol.protocol.Receiver;
 import ru.slon_ds.rmpdclient.remotecontrol.protocol.Sender;
+import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class ProtocolDispatcher implements ControlWrapper.OnMessageCallback {
@@ -21,10 +23,18 @@ public class ProtocolDispatcher implements ControlWrapper.OnMessageCallback {
 
     @Override
     public void onmessage(IncomingMessage msg, Integer seq) {
-        Logger.debug(this, "onmessage");
+        if (msg == null) {
+            Logger.error(this, "message is null");
+            return;
+        }
+        try {
+            new Receiver(control_wrapper, msg, seq).call();
+        } catch (Exception e) {
+            Logger.exception(this, "error processing message " + msg.toString(), e);
+        }
     }
 
-    public boolean send(String command_type, Object options) {
+    public boolean send(String command_type, KWargs options) {
         try {
             return new Sender(control_wrapper, command_type).call(options);
         } catch (Exception e) {

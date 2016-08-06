@@ -19,10 +19,6 @@
             </intent-filter>
         </activity>
 
-        <service
-            android:name=".remotecontrol.CommunicationService"
-            android:enabled="true"
-            android:exported="true"></service>
     </application>
 
 </manifest>

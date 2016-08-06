@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import ru.slon_ds.rmpdclient.remotecontrol.ControlWrapper;
 import ru.slon_ds.rmpdclient.remotecontrol.protocol.outgoing.BaseCommand;
+import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Support;
 
 public class Sender {
@@ -15,7 +16,7 @@ public class Sender {
         this.command_object = (BaseCommand) Class.forName(command_class_name).getConstructor(ControlWrapper.class).newInstance(control_wrapper);
     }
 
-    public boolean call(Object options) {
+    public boolean call(KWargs options) {
         return command_object.call(options);
     }
 }

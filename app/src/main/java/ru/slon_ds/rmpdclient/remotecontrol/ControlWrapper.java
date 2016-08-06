@@ -1,7 +1,6 @@
 package ru.slon_ds.rmpdclient.remotecontrol;
 
 import java.net.MalformedURLException;
-import java.util.HashMap;
 import java.util.Locale;
 
 import ru.slon_ds.rmpdclient.utils.Logger;
@@ -50,7 +49,7 @@ public class ControlWrapper extends Thread {
                     result = true;
                 }
             }
-        } catch (Throwable e) {
+        } catch (Exception e) {
             Logger.exception(this, "error sending message '" + message.toString() + "'", e);
         }
         return result;
@@ -61,18 +60,6 @@ public class ControlWrapper extends Thread {
         MessageQueue mq = mq();
         while (true) {
             try {
-
-                OutgoingMessage m = new OutgoingMessage();
-                m.put("ihate", "you");
-                HashMap<String, String> h = new HashMap<String, String>();
-                h.put("nope", "rwerwe");
-                h.put("ffff", "uuuuu");
-                m.put("hello", h);
-               /* if (send(m, true, 0)) {
-
-                }*/
-
-
                 MessageQueue.DequeueResult dequeued = mq.dequeue();
                 if (dequeued != null) {
                     MessageQueue.EnqueuedData enqueued = mq.new EnqueuedData(dequeued.data, dequeued.sequence_number);
@@ -80,7 +67,7 @@ public class ControlWrapper extends Thread {
                         mq.remove(dequeued.id);
                     }
                 }
-            } catch (Throwable e) {
+            } catch (Exception e) {
                 Logger.exception(this, "error checking message queue", e);
             }
 

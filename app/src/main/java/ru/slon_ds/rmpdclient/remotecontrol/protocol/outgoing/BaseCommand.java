@@ -4,10 +4,9 @@ import android.text.format.Time;
 
 import org.json.JSONException;
 
-import java.util.HashMap;
-
 import ru.slon_ds.rmpdclient.remotecontrol.ControlWrapper;
 import ru.slon_ds.rmpdclient.remotecontrol.OutgoingMessage;
+import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
 import ru.slon_ds.rmpdclient.utils.Support;
 
@@ -16,13 +15,13 @@ public class BaseCommand {
     private boolean queued = true;
     private Integer sequence = 0;
     private String message = null;
-    private HashMap<String, Object> json = new HashMap<String, Object>();
+    private KWargs json = new KWargs();
 
     public BaseCommand(ControlWrapper control_wrapper) {
         this.control_wrapper = control_wrapper;
     }
 
-    public boolean call(Object options) {
+    public boolean call(KWargs options) {
         try {
             return send();
         } catch (JSONException e) {
@@ -63,14 +62,22 @@ public class BaseCommand {
     }
 
     protected void set_sequence(Integer sequence) {
-        this.sequence = sequence;
+        if (sequence == null) {
+            this.sequence = 0;
+        } else {
+            this.sequence = sequence;
+        }
     }
 
     protected void set_message(String message) {
-        this.message = message;
+        if (message == null) {
+            this.message = "";
+        } else {
+            this.message = message;
+        }
     }
 
-    protected void set_json(HashMap<String, Object> json) {
+    protected void set_json(KWargs json) {
         this.json = json;
     }
 }
