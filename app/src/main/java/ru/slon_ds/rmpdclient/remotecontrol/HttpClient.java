@@ -6,6 +6,8 @@ import org.json.JSONException;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,6 +17,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import ru.slon_ds.rmpdclient.AndroidApplication;
+import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class HttpClient {
     private URL server_url;
@@ -54,6 +57,30 @@ public class HttpClient {
             connection.disconnect();
         }
         return result;
+    }
+
+    public boolean download_file(URL url, String localpath) {
+        try {
+            File tempfile = File.createTempFile(localpath.substring(localpath.lastIndexOf('/') + 1), null, AndroidApplication.getAppContext().getCacheDir());
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoOutput(true);
+            connection.setRequestMethod("GET");
+            connection.setConnectTimeout(20000);
+            connection.setReadTimeout(60000);
+            connection.setRequestProperty("User-Agent", AndroidApplication.user_agent());
+            FileOutputStream os = new FileOutputStream(tempfile);
+            InputStream is = connection.getInputStream();
+            byte[] buffer = new byte[2048];
+            int bufferLength;
+            while ((bufferLength = is.read(buffer)) > 0) {
+                os.write(buffer, 0, bufferLength);
+            }
+            os.close();
+            return tempfile.renameTo(new File(localpath));
+        } catch (IOException e) {
+            Logger.exception(this, "error downloading file", e);
+            return false;
+        }
     }
 
     private static String input_stream_to_string(InputStream is) throws IOException {
