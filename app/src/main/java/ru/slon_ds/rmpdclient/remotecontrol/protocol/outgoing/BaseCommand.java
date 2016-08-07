@@ -38,8 +38,9 @@ public class BaseCommand {
         return Support.camelcase_to_underscore(getClass().getSimpleName());
     }
 
-    protected Integer free_space() {
-        return 0;
+    protected Long free_space() {
+        return 100000000L;
+       // return System.free_space(Files.mediafiles_path());
     }
 
     protected String thetime() {

@@ -17,7 +17,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import ru.slon_ds.rmpdclient.AndroidApplication;
-import ru.slon_ds.rmpdclient.utils.Logger;
+import ru.slon_ds.rmpdclient.utils.Files;
 
 public class HttpClient {
     private URL server_url;
@@ -33,8 +33,8 @@ public class HttpClient {
     public HttpData send(OutgoingMessage msg, Integer seq) throws IOException, JSONException, HttpError {
         HttpData result = null;
         HttpURLConnection connection = (HttpURLConnection) server_url.openConnection();
-        connection.setConnectTimeout(10000);
-        connection.setReadTimeout(20000);
+        connection.setConnectTimeout(30_000);
+        connection.setReadTimeout(60_000);
         connection.setRequestProperty("X-Sequence-Number", seq.toString());
         connection.setRequestProperty("Authorization", basic_auth_header());
         connection.setDoOutput(true);
@@ -59,27 +59,30 @@ public class HttpClient {
         return result;
     }
 
-    public boolean download_file(URL url, String localpath) {
+    public void download_file(URL url, String localpath) throws IOException {
+        FileOutputStream os = null;
         try {
-            File tempfile = File.createTempFile(localpath.substring(localpath.lastIndexOf('/') + 1), null, AndroidApplication.getAppContext().getCacheDir());
+            File tempfile = File.createTempFile(Files.file_basename(localpath), null, new File(Files.temp_path()));
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoOutput(true);
             connection.setRequestMethod("GET");
-            connection.setConnectTimeout(20000);
-            connection.setReadTimeout(60000);
+            connection.setConnectTimeout(60_000);
+            connection.setReadTimeout(200_000);
             connection.setRequestProperty("User-Agent", AndroidApplication.user_agent());
-            FileOutputStream os = new FileOutputStream(tempfile);
+            connection.setRequestProperty("Accept","*/*");
+            os = new FileOutputStream(tempfile);
             InputStream is = connection.getInputStream();
             byte[] buffer = new byte[2048];
             int bufferLength;
             while ((bufferLength = is.read(buffer)) > 0) {
                 os.write(buffer, 0, bufferLength);
             }
-            os.close();
-            return tempfile.renameTo(new File(localpath));
-        } catch (IOException e) {
-            Logger.exception(this, "error downloading file", e);
-            return false;
+            os.flush();
+            Files.copy_file(tempfile.getAbsolutePath(), localpath);
+            tempfile.delete();
+        } finally {
+            if (os != null) {
+                os.close();
+            }
         }
     }
 

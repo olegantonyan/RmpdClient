@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         video_view.requestFocus();
         video_view.start();*/
 
-        //new Main().start();
+        new Main().start();
         Logger.info(this, Files.mediafiles_path());
     }
 }

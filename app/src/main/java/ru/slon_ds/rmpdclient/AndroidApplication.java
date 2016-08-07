@@ -5,15 +5,15 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 
 public class AndroidApplication extends Application {
-    private static Context context = null;
+    private static Context _context = null;
 
     public void onCreate() {
         super.onCreate();
-        context = getApplicationContext();
+        _context = getApplicationContext();
     }
 
-    public static Context getAppContext() {
-        return context;
+    public static Context context() {
+        return _context;
     }
 
     public static String user_agent() {
@@ -21,7 +21,7 @@ public class AndroidApplication extends Application {
     }
 
     public static String version() {
-        Context ctx = getAppContext();
+        Context ctx = context();
         try {
             return ctx.getPackageManager().getPackageInfo(ctx.getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e ){

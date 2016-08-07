@@ -1,6 +1,11 @@
 package ru.slon_ds.rmpdclient.utils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -10,19 +15,61 @@ import ru.slon_ds.rmpdclient.AndroidApplication;
 
 public class Files {
     public static String mediafiles_path() {
-        String ext = external_sdcard_path();
-        if (ext == null) {
-            return null;
-        }
-        return ext + "/" + AndroidApplication.getAppContext().getPackageName() + "/mediafiles";
+        String result = base_storage_path() + "/mediafiles";
+        create_path_if_not_exists(result);
+        return result;
     }
 
     public static URL full_url_by_relative(String relative) throws MalformedURLException {
         if (relative.startsWith("http")) {
             return new URL(relative);
         }
-        String server_base_url = "https://server.slon-ds.ru";
-        return new URL(server_base_url + "/" + relative);
+        String server_base_url = Config.instance().server_url();
+        return new URL(server_base_url + "" + relative);
+    }
+
+    public static String file_basename(String full_filepath) {
+        return full_filepath.substring(full_filepath.lastIndexOf('/') + 1);
+    }
+
+    public static String full_file_localpath(String relative_url) {
+        return mediafiles_path() + "/" + file_basename(relative_url);
+    }
+
+    public static String temp_path() {
+        return AndroidApplication.context().getCacheDir().getAbsolutePath();
+    }
+
+    public static String base_storage_path() {
+        String ext = external_sdcard_path();
+        if (ext == null) {
+            return null;
+        }
+        String result = ext + "/" + AndroidApplication.context().getPackageName();
+        create_path_if_not_exists(result);
+        return result;
+    }
+
+    public static boolean create_path_if_not_exists(String path) {
+        File f = new File(path);
+        return f.exists() || f.mkdirs();
+    }
+
+    public static void copy_file(String src, String dst) throws IOException {
+        InputStream in = new FileInputStream(src);
+        OutputStream out = new FileOutputStream(dst);
+
+        try {
+            byte[] buffer = new byte[1024];
+            int read;
+            while ((read = in.read(buffer)) != -1) {
+                out.write(buffer, 0, read);
+            }
+            out.flush();
+        } finally {
+            in.close();
+            out.close();
+        }
     }
 
     public static ArrayList<String> external_mounts() {

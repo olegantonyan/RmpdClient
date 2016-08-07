@@ -23,7 +23,7 @@ public class MessageQueue extends SQLiteOpenHelper {
 
     public static MessageQueue getInstance() {
         if (instance == null) {
-            instance = new MessageQueue(AndroidApplication.getAppContext());
+            instance = new MessageQueue(AndroidApplication.context());
         }
         return instance;
     }

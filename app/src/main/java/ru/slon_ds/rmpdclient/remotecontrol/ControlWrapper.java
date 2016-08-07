@@ -3,6 +3,7 @@ package ru.slon_ds.rmpdclient.remotecontrol;
 import java.net.MalformedURLException;
 import java.util.Locale;
 
+import ru.slon_ds.rmpdclient.utils.Config;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class ControlWrapper extends Thread {
@@ -87,7 +88,7 @@ public class ControlWrapper extends Thread {
 
     private HttpClient http_client() {
         try {
-            return new HttpClient("http://10.0.2.2:3000", "android", "12345678");
+            return new HttpClient(Config.instance().server_url(), Config.instance().login(), Config.instance().password());
         } catch (MalformedURLException e) {
             Logger.exception(this, "error creating http client", e);
             return null;

@@ -1,5 +1,6 @@
 package ru.slon_ds.rmpdclient.remotecontrol;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class IncomingMessage extends JSONObject {
@@ -19,7 +20,7 @@ public class IncomingMessage extends JSONObject {
             } else {
                 return default_value;
             }
-        } catch (org.json.JSONException e) {
+        } catch (JSONException e) {
             return default_value;
         }
     }
