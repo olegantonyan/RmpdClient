@@ -5,8 +5,6 @@ import android.util.Log;
 import ru.slon_ds.rmpdclient.AndroidApplication;
 
 public class Logger {
-    private static final String ANDROID_LOG_TAG = "rmpd_client";
-
     public static void info(Object source, String message) {
         Log.i(tag(source), message);
     }

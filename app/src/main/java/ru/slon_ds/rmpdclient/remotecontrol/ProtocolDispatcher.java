@@ -23,8 +23,8 @@ public class ProtocolDispatcher implements ControlWrapper.OnMessageCallback {
 
     @Override
     public void onmessage(IncomingMessage msg, Integer seq) {
-        if (msg == null) {
-            Logger.error(this, "message is null");
+        if (msg == null || msg.length() == 0) {
+            Logger.debug(this, "received message is null or empty");
             return;
         }
         try {

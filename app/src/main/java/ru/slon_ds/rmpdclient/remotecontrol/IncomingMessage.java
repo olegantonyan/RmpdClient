@@ -11,15 +11,20 @@ public class IncomingMessage extends JSONObject {
         super();
     }
 
-    public Object fetch(String key, Object default_value) {
+    public <T> T fetch(String key, Class<T> type, T default_value) {
         try {
-            return get(key);
+            Object value = get(key);
+            if (value != null && value.getClass().isInstance(type)) {
+                return type.cast(value);
+            } else {
+                return default_value;
+            }
         } catch (org.json.JSONException e) {
             return default_value;
         }
     }
 
-    public Object fetch(String key) {
-        return fetch(key, null);
+    public <T> T fetch(String key, Class<T> type) {
+        return fetch(key, type, null);
     }
 }
