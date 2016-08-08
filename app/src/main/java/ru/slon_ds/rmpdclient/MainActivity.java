@@ -5,9 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
 
-import ru.slon_ds.rmpdclient.utils.Files;
-import ru.slon_ds.rmpdclient.utils.Logger;
-
 public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +29,5 @@ public class MainActivity extends AppCompatActivity {
         video_view.start();*/
 
         new Main().start();
-        Logger.info(this, Files.mediafiles_path());
     }
 }

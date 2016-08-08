@@ -1,10 +1,15 @@
 package ru.slon_ds.rmpdclient.mediaplayer.playlist;
 
+import java.util.ArrayList;
+
 import ru.slon_ds.rmpdclient.utils.JsonDict;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class Playlist {
     private JsonDict data = null;
+    private ArrayList<Item> background = new ArrayList<>();
+    private ArrayList<Item> advertising = new ArrayList<>();
+
 
     public Playlist() {
         try {
@@ -12,5 +17,21 @@ public class Playlist {
         } catch (Exception e) {
             Logger.exception(this, "error loading playlist", e);
         }
+        for (Item i : all_items()) {
+            if (i.is_advertising()) {
+                this.advertising.add(i);
+            } else if (i.is_background()) {
+                this.background.add(i);
+            }
+        }
+    }
+
+    private ArrayList<Item> all_items() {
+        ArrayList<Item> result = new ArrayList<>();
+        ArrayList<JsonDict> items = data.fetch_array_of_objects("items");
+        for (JsonDict i : items) {
+            result.add(new Item(i));
+        }
+        return result;
     }
 }

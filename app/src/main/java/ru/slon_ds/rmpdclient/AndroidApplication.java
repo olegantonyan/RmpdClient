@@ -3,6 +3,7 @@ package ru.slon_ds.rmpdclient;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 
 public class AndroidApplication extends Application {
     private static Context _context = null;
@@ -17,7 +18,24 @@ public class AndroidApplication extends Application {
     }
 
     public static String user_agent() {
-        return "rmpd-android " + version() + " " + System.getProperty("http.agent");
+        /*String hw = "board:" + Build.BOARD + "," +
+                "bootloader:" + Build.BOOTLOADER + "," +
+                "brand:" + Build.BRAND + "," +
+                "device:" + Build.DEVICE + "," +
+                "display:" + Build.DISPLAY + "," +
+                "fingerprint:" + Build.FINGERPRINT + "," +
+                "hardware:" + Build.HARDWARE + "," +
+                "host:" + Build.HOST + "," +
+                "id:" + Build.ID + "," +
+                "manufacturer:" + Build.MANUFACTURER + "," +
+                "model:" + Build.MODEL + "," +
+                "product:" + Build.PRODUCT + "," +
+                "radio:" + Build.getRadioVersion() +
+                "serial:" + Build.SERIAL + "," +
+                "tags:" + Build.TAGS + "," +
+                "type:" + Build.TYPE + "," +
+                "user:" + Build.USER;*/
+        return "rmpd-android " + version() + " " + System.getProperty("http.agent") + " [" + System.getProperty("os.version") + "] " + Build.BRAND + " " + Build.MODEL;
     }
 
     public static String version() {

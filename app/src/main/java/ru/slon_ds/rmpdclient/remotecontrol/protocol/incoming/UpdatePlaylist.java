@@ -44,7 +44,7 @@ public class UpdatePlaylist extends BaseCommand implements DownloadWorker.OnDown
 
     private void send_begin_command(ArrayList<URL> urls) {
         KWargs opts = new KWargs();
-        ArrayList<String> filenames = new ArrayList();
+        ArrayList<String> filenames = new ArrayList<>();
         for (URL u : urls) {
             filenames.add(Files.file_basename(u.toString()));
         }
@@ -54,7 +54,7 @@ public class UpdatePlaylist extends BaseCommand implements DownloadWorker.OnDown
 
     private ArrayList<URL> items_urls() {
         ArrayList<JsonDict> items = get_data().fetch_object("playlist").fetch_array_of_objects("items");
-        ArrayList<URL> urls = new ArrayList();
+        ArrayList<URL> urls = new ArrayList<>();
         try {
             for (JsonDict m : items) {
                 urls.add(Files.full_url_by_relative(m.fetch("url", String.class)));
@@ -151,7 +151,7 @@ class DownloadWorker extends Thread {
     }
 
     private void utilize_not_playlist_files() {
-        ArrayList<String> filenames = new ArrayList();
+        ArrayList<String> filenames = new ArrayList<>();
         for (URL u : urls) {
             filenames.add(Files.file_basename(u.toString()));
         }
