@@ -1,16 +1,16 @@
 package ru.slon_ds.rmpdclient.remotecontrol.protocol.incoming;
 
 import ru.slon_ds.rmpdclient.remotecontrol.ControlWrapper;
-import ru.slon_ds.rmpdclient.remotecontrol.IncomingMessage;
 import ru.slon_ds.rmpdclient.remotecontrol.protocol.Sender;
+import ru.slon_ds.rmpdclient.utils.JsonDict;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
 public abstract class BaseCommand {
     private ControlWrapper control_wrapper = null;
-    private IncomingMessage data = null;
+    private JsonDict data = null;
     private Integer sequence = 0;
 
-    public BaseCommand(ControlWrapper control_wrapper, IncomingMessage data, Integer sequence_number) {
+    public BaseCommand(ControlWrapper control_wrapper, JsonDict data, Integer sequence_number) {
         this.control_wrapper = control_wrapper;
         this.data = data;
         this.sequence = sequence_number;
@@ -22,7 +22,7 @@ public abstract class BaseCommand {
         return control_wrapper;
     }
 
-    protected IncomingMessage get_data() {
+    protected JsonDict get_data() {
         return data;
     }
 

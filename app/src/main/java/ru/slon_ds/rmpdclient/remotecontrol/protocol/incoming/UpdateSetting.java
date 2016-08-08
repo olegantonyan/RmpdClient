@@ -1,12 +1,12 @@
 package ru.slon_ds.rmpdclient.remotecontrol.protocol.incoming;
 
 import ru.slon_ds.rmpdclient.remotecontrol.ControlWrapper;
-import ru.slon_ds.rmpdclient.remotecontrol.IncomingMessage;
+import ru.slon_ds.rmpdclient.utils.JsonDict;
 import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class UpdateSetting extends BaseCommand {
-    public UpdateSetting(ControlWrapper control_wrapper, IncomingMessage data, Integer sequence_number) {
+    public UpdateSetting(ControlWrapper control_wrapper, JsonDict data, Integer sequence_number) {
         super(control_wrapper, data, sequence_number);
     }
 

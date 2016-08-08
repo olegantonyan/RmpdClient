@@ -18,6 +18,7 @@ import java.net.URL;
 
 import ru.slon_ds.rmpdclient.AndroidApplication;
 import ru.slon_ds.rmpdclient.utils.Files;
+import ru.slon_ds.rmpdclient.utils.JsonDict;
 
 public class HttpClient {
     private URL server_url;
@@ -30,7 +31,7 @@ public class HttpClient {
         this.password = password;
     }
 
-    public HttpData send(OutgoingMessage msg, Integer seq) throws IOException, JSONException, HttpError {
+    public HttpData send(JsonDict msg, Integer seq) throws IOException, JSONException, HttpError {
         HttpData result = null;
         HttpURLConnection connection = (HttpURLConnection) server_url.openConnection();
         connection.setConnectTimeout(30_000);
@@ -51,7 +52,7 @@ public class HttpClient {
             result = new HttpData();
             InputStream in = new BufferedInputStream(connection.getInputStream());
             String json_string = input_stream_to_string(in);
-            result.data = new IncomingMessage(json_string);
+            result.data = new JsonDict(json_string);
             result.sequence_number = connection.getHeaderFieldInt("X-Sequence-Number", 0);
         } finally {
             connection.disconnect();
@@ -61,8 +62,8 @@ public class HttpClient {
 
     public void download_file(URL url, String localpath) throws IOException {
         FileOutputStream os = null;
+        File tempfile = File.createTempFile(Files.file_basename(localpath), null, new File(Files.temp_path()));
         try {
-            File tempfile = File.createTempFile(Files.file_basename(localpath), null, new File(Files.temp_path()));
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setConnectTimeout(60_000);
@@ -78,10 +79,12 @@ public class HttpClient {
             }
             os.flush();
             Files.copy_file(tempfile.getAbsolutePath(), localpath);
-            tempfile.delete();
         } finally {
             if (os != null) {
                 os.close();
+            }
+            if (tempfile.exists()) {
+                tempfile.delete();
             }
         }
     }
@@ -109,7 +112,7 @@ public class HttpClient {
     }
 
     public class HttpData {
-        public IncomingMessage data;
+        public JsonDict data;
         public Integer sequence_number;
     }
 

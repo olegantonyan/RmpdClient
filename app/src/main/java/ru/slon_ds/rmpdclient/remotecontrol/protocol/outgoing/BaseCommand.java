@@ -5,7 +5,7 @@ import android.text.format.Time;
 import org.json.JSONException;
 
 import ru.slon_ds.rmpdclient.remotecontrol.ControlWrapper;
-import ru.slon_ds.rmpdclient.remotecontrol.OutgoingMessage;
+import ru.slon_ds.rmpdclient.utils.JsonDict;
 import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
 import ru.slon_ds.rmpdclient.utils.Support;
@@ -49,8 +49,8 @@ public class BaseCommand {
         return tm.format("%Y-%m-%dT%H:%M:%S%z");
     }
 
-    protected OutgoingMessage default_data() throws JSONException {
-        OutgoingMessage m = new OutgoingMessage();
+    protected JsonDict default_data() throws JSONException {
+        JsonDict m = new JsonDict();
         m.put("localtime", thetime());
         m.put("command", type());
         m.put("message", message);

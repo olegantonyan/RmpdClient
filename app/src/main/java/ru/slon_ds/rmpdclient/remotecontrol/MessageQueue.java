@@ -7,6 +7,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
@@ -15,20 +16,21 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import ru.slon_ds.rmpdclient.AndroidApplication;
+import ru.slon_ds.rmpdclient.utils.JsonDict;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class MessageQueue extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "message_queue.db";
 
-    public static MessageQueue getInstance() {
-        if (instance == null) {
-            instance = new MessageQueue(AndroidApplication.context());
+    public static MessageQueue instance() {
+        if (_instance == null) {
+            _instance = new MessageQueue(AndroidApplication.context());
         }
-        return instance;
+        return _instance;
     }
 
-    private static MessageQueue instance = null;
+    private static MessageQueue _instance = null;
 
     private MessageQueue(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -45,7 +47,7 @@ public class MessageQueue extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean enqueue(EnqueuedData data) {
+    public synchronized boolean enqueue(EnqueuedData data) {
         try {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
@@ -59,21 +61,21 @@ public class MessageQueue extends SQLiteOpenHelper {
         }
     }
 
-    public DequeueResult dequeue() {
+    public synchronized DequeueResult dequeue() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor =  db.rawQuery("SELECT [id], [data] FROM message_queue ORDER BY [created_at] LIMIT 1", null);
         DequeueResult result = null;
         try {
             if (cursor.moveToFirst()) {
                 result = new DequeueResult();
-                JSONObject json_data = new JSONObject(cursor.getString(cursor.getColumnIndex("data")));
-                result.data = new OutgoingMessage(json_data.getString("msg"));
-                result.sequence_number = json_data.getInt("seq");
+                JsonDict json_data = new JsonDict(cursor.getString(cursor.getColumnIndex("data")));
+                result.data = json_data.fetch_object("msg");
+                result.sequence_number = json_data.fetch("seq", Integer.class);
                 result.id = cursor.getInt(cursor.getColumnIndex("id"));
             }
         } catch (SQLException e) {
             Logger.exception(this, "dequeue error", e);
-        } catch (org.json.JSONException e) {
+        } catch (JSONException e) {
             Logger.exception(this, "dequeue error (parser)", e);
         } finally {
             cursor.close();
@@ -81,7 +83,7 @@ public class MessageQueue extends SQLiteOpenHelper {
         return result;
     }
 
-    public void remove(Integer id) {
+    public synchronized void remove(Integer id) {
         SQLiteDatabase db = this.getWritableDatabase();
         try {
             db.execSQL("DELETE FROM message_queue WHERE [id]=" + id.toString());
@@ -97,16 +99,16 @@ public class MessageQueue extends SQLiteOpenHelper {
     }
 
     public class DequeueResult {
-        public OutgoingMessage data = null;
+        public JsonDict data = null;
         public Integer sequence_number = null;
         public Integer id = null;
     }
 
     public class EnqueuedData {
-        public OutgoingMessage data = null;
+        public JsonDict data = null;
         public Integer sequence_number = null;
 
-        public EnqueuedData(OutgoingMessage data, Integer sequence_number) {
+        public EnqueuedData(JsonDict data, Integer sequence_number) {
             this.data = data;
             this.sequence_number = sequence_number;
         }

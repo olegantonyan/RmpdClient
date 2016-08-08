@@ -37,7 +37,9 @@ public class Files {
     }
 
     public static String temp_path() {
-        return AndroidApplication.context().getCacheDir().getAbsolutePath();
+        String result = base_storage_path() + "/temp"; //AndroidApplication.context().getCacheDir().getAbsolutePath();
+        create_path_if_not_exists(result);
+        return result;
     }
 
     public static String base_storage_path() {
@@ -58,7 +60,6 @@ public class Files {
     public static void copy_file(String src, String dst) throws IOException {
         InputStream in = new FileInputStream(src);
         OutputStream out = new FileOutputStream(dst);
-
         try {
             byte[] buffer = new byte[1024];
             int read;

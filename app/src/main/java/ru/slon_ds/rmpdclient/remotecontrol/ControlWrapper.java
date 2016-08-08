@@ -4,13 +4,14 @@ import java.net.MalformedURLException;
 import java.util.Locale;
 
 import ru.slon_ds.rmpdclient.utils.Config;
+import ru.slon_ds.rmpdclient.utils.JsonDict;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class ControlWrapper extends Thread {
     private OnMessageCallback callback = null;
 
     interface OnMessageCallback {
-        void onmessage(IncomingMessage msg, Integer seq);
+        void onmessage(JsonDict msg, Integer seq);
     }
 
     public ControlWrapper(OnMessageCallback callback) {
@@ -18,19 +19,19 @@ public class ControlWrapper extends Thread {
         start();
     }
 
-    public boolean send(OutgoingMessage message) {
+    public boolean send(JsonDict message) {
         return send(message, false, 0);
     }
 
-    public boolean send(OutgoingMessage message, Integer sequence_number) {
+    public boolean send(JsonDict message, Integer sequence_number) {
         return send(message, false, sequence_number);
     }
 
-    public boolean send(OutgoingMessage message, boolean queued) {
+    public boolean send(JsonDict message, boolean queued) {
         return send(message, queued, 0);
     }
 
-    public boolean send(OutgoingMessage message, boolean queued, Integer sequence_number) {
+    public boolean send(JsonDict message, boolean queued, Integer sequence_number) {
         if (message == null) {
             return false;
         }
@@ -83,7 +84,7 @@ public class ControlWrapper extends Thread {
     }
 
     private MessageQueue mq() {
-        return MessageQueue.getInstance();
+        return MessageQueue.instance();
     }
 
     private HttpClient http_client() {
@@ -95,7 +96,7 @@ public class ControlWrapper extends Thread {
         }
     }
 
-    private void onreceive(IncomingMessage msg, Integer sequence_number) {
+    private void onreceive(JsonDict msg, Integer sequence_number) {
         Logger.debug(this, "received message: " + msg.toString());
         if (callback != null) {
             callback.onmessage(msg, sequence_number);
