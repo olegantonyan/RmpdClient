@@ -1,7 +1,11 @@
 package ru.slon_ds.rmpdclient.mediaplayer.playlist;
 
+import org.json.JSONException;
+
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -41,5 +45,28 @@ public class Loader {
         BufferedWriter bw = new BufferedWriter(fw);
         bw.write(data.toString());
         bw.close();
+    }
+
+    public JsonDict load() throws IOException, JSONException {
+        JsonDict result = null;
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader(filepath()));
+            String line;
+            String contents = "";
+            while ((line = br.readLine()) != null) {
+                contents += line;
+            }
+            result = new JsonDict(contents.replace("\n", "").replace("\r", ""));
+        } finally {
+            if (br != null) {
+                br.close();
+            }
+        }
+        return result;
+    }
+
+    public boolean file_exists() {
+        return new File(filepath()).exists();
     }
 }

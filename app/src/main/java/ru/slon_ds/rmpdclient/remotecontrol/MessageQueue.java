@@ -47,7 +47,7 @@ public class MessageQueue extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public synchronized boolean enqueue(EnqueuedData data) {
+    public boolean enqueue(EnqueuedData data) {
         try {
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
@@ -61,7 +61,7 @@ public class MessageQueue extends SQLiteOpenHelper {
         }
     }
 
-    public synchronized DequeueResult dequeue() {
+    public DequeueResult dequeue() {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor =  db.rawQuery("SELECT [id], [data] FROM message_queue ORDER BY [created_at] LIMIT 1", null);
         DequeueResult result = null;
@@ -83,7 +83,7 @@ public class MessageQueue extends SQLiteOpenHelper {
         return result;
     }
 
-    public synchronized void remove(Integer id) {
+    public void remove(Integer id) {
         SQLiteDatabase db = this.getWritableDatabase();
         try {
             db.execSQL("DELETE FROM message_queue WHERE [id]=" + id.toString());

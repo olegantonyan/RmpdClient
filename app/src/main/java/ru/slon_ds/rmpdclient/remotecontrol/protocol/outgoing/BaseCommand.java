@@ -5,6 +5,8 @@ import android.text.format.Time;
 import org.json.JSONException;
 
 import ru.slon_ds.rmpdclient.remotecontrol.ControlWrapper;
+import ru.slon_ds.rmpdclient.utils.Control;
+import ru.slon_ds.rmpdclient.utils.Files;
 import ru.slon_ds.rmpdclient.utils.JsonDict;
 import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
@@ -39,8 +41,8 @@ public class BaseCommand {
     }
 
     protected Long free_space() {
-        return 100000000L;
-       // return System.free_space(Files.mediafiles_path());
+       // return 100000000L;
+       return Control.free_space(Files.mediafiles_path());
     }
 
     protected String thetime() {

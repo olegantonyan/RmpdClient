@@ -2,7 +2,7 @@ package ru.slon_ds.rmpdclient.utils;
 
 import android.os.StatFs;
 
-public class System {
+public class Control {
     public static Long free_space(String path) {
         try {
             StatFs stat = new StatFs(path);
