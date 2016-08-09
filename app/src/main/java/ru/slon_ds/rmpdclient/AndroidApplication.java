@@ -33,7 +33,7 @@ public class AndroidApplication extends Application {
                 "radio:" + Build.getRadioVersion() +
                 "serial:" + Build.SERIAL + "," +
                 "tags:" + Build.TAGS + "," +
-                "type:" + Build.TYPE + "," +
+                "command:" + Build.TYPE + "," +
                 "user:" + Build.USER;*/
         return "rmpd-android " + version() + " " + System.getProperty("http.agent") + " [" + System.getProperty("os.version") + "] " + Build.BRAND + " " + Build.MODEL;
     }

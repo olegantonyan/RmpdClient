@@ -10,20 +10,26 @@ public class Playlist {
     private ArrayList<Item> background = new ArrayList<>();
     private ArrayList<Item> advertising = new ArrayList<>();
 
-
     public Playlist() {
         try {
             this.data = new Loader().load(); // TODO dependency injection
+            for (Item i : all_items()) {
+                if (i.is_advertising()) {
+                    this.advertising.add(i);
+                } else if (i.is_background()) {
+                    this.background.add(i);
+                }
+            }
         } catch (Exception e) {
             Logger.exception(this, "error loading playlist", e);
         }
-        for (Item i : all_items()) {
-            if (i.is_advertising()) {
-                this.advertising.add(i);
-            } else if (i.is_background()) {
-                this.background.add(i);
-            }
+    }
+
+    public Item first_background() {
+        if (background.isEmpty()) {
+            return null;
         }
+        return background.get(0);
     }
 
     private ArrayList<Item> all_items() {

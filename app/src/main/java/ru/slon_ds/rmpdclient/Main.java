@@ -1,19 +1,23 @@
 package ru.slon_ds.rmpdclient;
 
 import ru.slon_ds.rmpdclient.mediaplayer.PlayerController;
+import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerWrapper;
 import ru.slon_ds.rmpdclient.remotecontrol.ProtocolDispatcher;
 import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class Main extends Thread {
-    public Main() {
+    private PlayerWrapper player_wrapper = null;
+
+    public Main(PlayerWrapper player_wrapper) {
         super();
+        this.player_wrapper = player_wrapper;
     }
 
     @Override
     public void run() {
         ProtocolDispatcher proto = ProtocolDispatcher.getInstance();
-        PlayerController player = new PlayerController();
+        PlayerController player = new PlayerController(player_wrapper);
         player.start_playlist();
         while (true) {
             KWargs kw = new KWargs();

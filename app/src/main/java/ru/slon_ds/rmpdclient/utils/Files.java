@@ -1,5 +1,7 @@
 package ru.slon_ds.rmpdclient.utils;
 
+import android.os.Environment;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -45,7 +47,7 @@ public class Files {
     public static String base_storage_path() {
         String ext = external_sdcard_path();
         if (ext == null) {
-            return null;
+            ext = Environment.getExternalStorageDirectory().getAbsolutePath();
         }
         String result = ext + "/" + AndroidApplication.context().getPackageName();
         create_path_if_not_exists(result);
