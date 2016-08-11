@@ -17,6 +17,11 @@ public class JsonDict extends JSONObject {
         super();
     }
 
+    public JsonDict(HashMap<String, Object> kwargs) throws JSONException {
+        super();
+        merge_hashmap(kwargs);
+    }
+
     public JsonDict merge_hashmap(HashMap<String, Object> other) throws JSONException {
         for (Map.Entry<String, Object> entry: other.entrySet()) {
             String key = entry.getKey();

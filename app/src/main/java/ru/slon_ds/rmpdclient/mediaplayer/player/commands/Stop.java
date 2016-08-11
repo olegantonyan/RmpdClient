@@ -12,8 +12,9 @@ public class Stop extends BaseCommand {
 
     @Override
     public KWargs call() {
+        //video_view.seekTo(video_view.getDuration());
+        video_view.stopPlayback();
         Logger.info(this, "stopped");
-        video_view.seekTo(video_view.getDuration());
         return new KWargs();
     }
 }

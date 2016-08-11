@@ -4,6 +4,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 
 import ru.slon_ds.rmpdclient.mediaplayer.playlist.Item;
+import ru.slon_ds.rmpdclient.remotecontrol.ProtocolDispatcher;
 import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
@@ -22,14 +23,20 @@ public class Watcher extends Thread implements PlayerWrapper.Callback {
     }
 
     public void play(Item item) {
+        if (is_playing()) {
+            stop_playback();
+        }
         KWargs options = new KWargs();
         options.put("item", item);
         execute("play", options);
         set_now_playing(item);
+        onplay(item);
     }
 
     public void stop_playback() {
+        Item current = get_now_playing();
         execute("stop");
+        track_finished(current);
     }
 
     public boolean is_playing() {
@@ -92,13 +99,15 @@ public class Watcher extends Thread implements PlayerWrapper.Callback {
     }
 
     private void track_finished(Item item) {
-        set_now_playing(null);
         Logger.info(this, "track finished '" + item.filename() + "'");
+        onstop(item);
+        set_now_playing(null);
     }
 
     private void track_error(Item item) {
-        set_now_playing(null);
         Logger.error(this, "playback error " + item.filename());
+        onerror(item, "error");
+        track_finished(item);
     }
 
     private synchronized Item get_now_playing() {
@@ -121,6 +130,25 @@ public class Watcher extends Thread implements PlayerWrapper.Callback {
 
     private KWargs execute(String command) {
         return execute(command, new KWargs());
+    }
+
+    private void onplay(Item item) {
+        KWargs options = new KWargs();
+        options.put("item", item);
+        ProtocolDispatcher.instance().send("track_begin", options);
+    }
+
+    private void onstop(Item item) {
+        KWargs options = new KWargs();
+        options.put("item", item);
+        ProtocolDispatcher.instance().send("track_end", options);
+    }
+
+    private void onerror(Item item, String message) {
+        KWargs options = new KWargs();
+        options.put("item", item);
+        options.put("message", message);
+        ProtocolDispatcher.instance().send("playback_error", options);
     }
 
     class QueuedMessage implements Comparable<QueuedMessage> {

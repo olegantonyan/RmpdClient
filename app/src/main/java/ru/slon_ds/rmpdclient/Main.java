@@ -16,7 +16,7 @@ public class Main extends Thread {
 
     @Override
     public void run() {
-        ProtocolDispatcher proto = ProtocolDispatcher.getInstance();
+        ProtocolDispatcher proto = ProtocolDispatcher.instance();
         PlayerController player = new PlayerController(player_wrapper);
         player.start_playlist();
         while (true) {

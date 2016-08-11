@@ -4,6 +4,7 @@ import android.text.format.Time;
 
 import org.json.JSONException;
 
+import ru.slon_ds.rmpdclient.mediaplayer.playlist.Item;
 import ru.slon_ds.rmpdclient.remotecontrol.ControlWrapper;
 import ru.slon_ds.rmpdclient.utils.Control;
 import ru.slon_ds.rmpdclient.utils.Files;
@@ -16,7 +17,7 @@ public class BaseCommand {
     private ControlWrapper control_wrapper = null;
     private boolean queued = true;
     private Integer sequence = 0;
-    private String message = null;
+    private Object message = null;
     private KWargs json = new KWargs();
 
     public BaseCommand(ControlWrapper control_wrapper) {
@@ -80,7 +81,26 @@ public class BaseCommand {
         }
     }
 
+    protected void set_message(KWargs message) {
+        if (message == null) {
+            this.message = "";
+        } else {
+            try {
+                this.message = new JsonDict(message);
+            } catch (JSONException e) {
+                this.message = "";
+            }
+        }
+    }
+
     protected void set_json(KWargs json) {
         this.json = json;
+    }
+
+    protected KWargs track_message(Item track) {
+        KWargs a = new KWargs();
+        a.put("id", track.id());
+        a.put("filename", track.filename());
+        return a;
     }
 }

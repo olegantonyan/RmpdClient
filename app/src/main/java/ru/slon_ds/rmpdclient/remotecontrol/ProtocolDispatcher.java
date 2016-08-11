@@ -7,14 +7,14 @@ import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class ProtocolDispatcher implements ControlWrapper.OnMessageCallback {
-    private static ProtocolDispatcher instance = null;
+    private static ProtocolDispatcher _instance = null;
     private ControlWrapper control_wrapper = null;
 
-    public static ProtocolDispatcher getInstance() {
-        if (instance == null) {
-            instance = new ProtocolDispatcher();
+    public static ProtocolDispatcher instance() {
+        if (_instance == null) {
+            _instance = new ProtocolDispatcher();
         }
-        return instance;
+        return _instance;
     }
 
     private ProtocolDispatcher() {

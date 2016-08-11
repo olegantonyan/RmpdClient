@@ -8,9 +8,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import ru.slon_ds.rmpdclient.utils.Files;
 import ru.slon_ds.rmpdclient.utils.JsonDict;
+import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class Loader {
     private String _filename = null;
@@ -68,5 +70,18 @@ public class Loader {
 
     public boolean file_exists() {
         return new File(filepath()).exists();
+    }
+
+    public ArrayList<String> list_all_files() {
+        ArrayList<String> files = new ArrayList<>();
+        try {
+            ArrayList<JsonDict> items = load().fetch_array_of_objects("items");
+            for (JsonDict m : items) {
+                files.add(m.fetch("filename", String.class));
+            }
+        } catch (Exception e) {
+            Logger.exception(this, "error extracting items filenames", e);
+        }
+        return files;
     }
 }
