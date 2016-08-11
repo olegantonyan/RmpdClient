@@ -16,7 +16,7 @@ import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
 import ru.slon_ds.rmpdclient.utils.Support;
 
-public class PlayerWrapper extends Handler implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener{
+public class PlayerWrapper extends Handler implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener {
     private VideoView video_view = null;
     private Callback callback = null;
     private BlockingQueue<KWargs> queue = null;
@@ -31,6 +31,7 @@ public class PlayerWrapper extends Handler implements MediaPlayer.OnErrorListene
         video_view = vv;
         video_view.setOnErrorListener(this);
         video_view.setOnCompletionListener(this);
+        video_view.setOnPreparedListener(this);
         queue = new LinkedBlockingQueue<>();
     }
 
@@ -63,6 +64,11 @@ public class PlayerWrapper extends Handler implements MediaPlayer.OnErrorListene
             callback.onerror();
         }
         return false;
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mediaPlayer) {
+        Logger.debug(this, "media player is ready to go");
     }
 
     @Override

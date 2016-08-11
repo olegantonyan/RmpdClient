@@ -93,9 +93,9 @@ public class MessageQueue extends SQLiteOpenHelper {
     }
 
     private String current_time_utc() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss 'UTC'", Locale.US);
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return sdf.format(new Date()) + " UTC";
+        return sdf.format(new Date());
     }
 
     public class DequeueResult {

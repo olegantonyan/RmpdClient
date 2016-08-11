@@ -1,8 +1,10 @@
 package ru.slon_ds.rmpdclient.remotecontrol.protocol.outgoing;
 
-import android.text.format.Time;
-
 import org.json.JSONException;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import ru.slon_ds.rmpdclient.mediaplayer.playlist.Item;
 import ru.slon_ds.rmpdclient.remotecontrol.ControlWrapper;
@@ -47,9 +49,8 @@ public class BaseCommand {
     }
 
     protected String thetime() {
-        Time tm = new Time();
-        tm.setToNow();
-        return tm.format("%Y-%m-%dT%H:%M:%S%z");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZ", Locale.US);
+        return sdf.format(new Date());
     }
 
     protected JsonDict default_data() throws JSONException {

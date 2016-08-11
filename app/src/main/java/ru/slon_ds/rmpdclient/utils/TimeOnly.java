@@ -1,6 +1,10 @@
 package ru.slon_ds.rmpdclient.utils;
 
-public class TimeOnly {
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
+public class TimeOnly implements Comparable<TimeOnly> {
     public Integer hours;
     public Integer minutes;
     public Integer seconds;
@@ -24,6 +28,15 @@ public class TimeOnly {
         }
     }
 
+    public TimeOnly(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        hours = cal.get(Calendar.HOUR_OF_DAY);
+        minutes = cal.get(Calendar.MINUTE);
+        seconds = cal.get(Calendar.SECOND);
+
+    }
+
     public boolean equals(TimeOnly other) {
         return hours.equals(other.hours) && minutes.equals(other.minutes) && seconds.equals(other.seconds);
     }
@@ -45,7 +58,34 @@ public class TimeOnly {
         return seconds > other.seconds;
     }
 
+    public boolean greater_or_equal(TimeOnly other) {
+        return equals(other) || greater(other);
+    }
+
+    public boolean less_or_equal(TimeOnly other) {
+        return equals(other) || less(other);
+    }
+
     public boolean less(TimeOnly other) {
         return !equals(other) && !greater(other);
+    }
+
+    @Override
+    public int compareTo(TimeOnly other) {
+        if (equals(other)) {
+            return 0;
+        } else if (greater(other)) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
+    public String toString() {
+        return String.format(Locale.US, "%02d:%02d:%02d", hours, minutes, seconds);
+    }
+
+    public Integer to_seconds() {
+        return hours * 3600 + minutes * 60 + seconds;
     }
 }
