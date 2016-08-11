@@ -17,6 +17,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         VideoView video_view = (VideoView) findViewById(R.id.videoView);
+        video_view.setZOrderOnTop(true);
+        video_view.requestFocus();
+
         /*String address = "https://ia800201.us.archive.org/22/items/ksnn_compilation_master_the_internet/ksnn_compilation_master_the_internet_512kb.mp4";
         Uri uri = Uri.parse(address);
         video_view.setVideoPath("/mnt/sdcard/external_sdcard/elixir_for_rubyist.mp4");

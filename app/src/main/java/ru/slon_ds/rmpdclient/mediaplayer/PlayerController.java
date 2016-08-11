@@ -12,18 +12,22 @@ import ru.slon_ds.rmpdclient.utils.Logger;
 public class PlayerController {
     private Watcher player = null;
     private Scheduler scheduler = null;
+    private static PlayerController _instance = null;
+
+    public static PlayerController instance() {
+        return _instance;
+    }
 
     public PlayerController(PlayerWrapper player_wrapper) {
         player = new Watcher(player_wrapper);
         scheduler = new Scheduler(player);
+        _instance = this;
     }
 
     public void start_playlist() {
         Loader loader = new Loader();
         if (loader.file_exists()) {
             Playlist playlist = new Playlist();
-
-
             KWargs k = new KWargs();
             k.put("files", loader.list_all_files());
             ProtocolDispatcher.instance().send("playlist_begin", k);
@@ -41,12 +45,7 @@ public class PlayerController {
         player.quit();
     }
 
-    int c = 0;
     public String current_track_name() {
-        c++;
-        if (c == 1 || c % 2 == 0) {
-            player.play(new Playlist().first_background());
-        }
         return player.filename();
     }
 

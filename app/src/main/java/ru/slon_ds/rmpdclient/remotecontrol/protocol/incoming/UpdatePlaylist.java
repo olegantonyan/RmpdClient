@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import ru.slon_ds.rmpdclient.mediaplayer.PlayerController;
 import ru.slon_ds.rmpdclient.mediaplayer.playlist.Loader;
 import ru.slon_ds.rmpdclient.remotecontrol.ControlWrapper;
 import ru.slon_ds.rmpdclient.remotecontrol.HttpClient;
@@ -32,6 +33,7 @@ public class UpdatePlaylist extends BaseCommand implements DownloadWorker.OnDown
     public void onfinished(boolean ok, Integer seq, String message) {
         Logger.info(this, "playlist update finished " + (ok ? "successfully" : "failure") + ":" + message + " (" + seq.toString() + ")");
         save_playlist_file();
+        PlayerController.instance().start_playlist();
         ack(ok, seq, message);
     }
 

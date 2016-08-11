@@ -13,6 +13,15 @@ public class Watcher extends Thread implements PlayerWrapper.Callback {
     private PriorityBlockingQueue<QueuedMessage> tx = null;
     private LinkedBlockingQueue<KWargs> rx = null;
     private Item now_playing = null;
+    private Callback callback = null;
+
+    public interface Callback {
+        void onfinished(Item item);
+    }
+
+    public void set_callback(Callback cb) {
+        this.callback = cb;
+    }
 
     public Watcher(PlayerWrapper pw) {
         player_wrapper = pw;
@@ -23,6 +32,10 @@ public class Watcher extends Thread implements PlayerWrapper.Callback {
     }
 
     public void play(Item item) {
+        if (item == null) {
+            Logger.warning(this, "item is null, cannot play");
+            return;
+        }
         if (is_playing()) {
             stop_playback();
         }
@@ -36,7 +49,7 @@ public class Watcher extends Thread implements PlayerWrapper.Callback {
     public void stop_playback() {
         Item current = get_now_playing();
         execute("stop");
-        track_finished(current);
+        track_finish(current);
     }
 
     public boolean is_playing() {
@@ -75,7 +88,10 @@ public class Watcher extends Thread implements PlayerWrapper.Callback {
                     track_error(item);
                 } else if (msg.command.equals("onfinished")) {
                     Item item = get_now_playing();
-                    track_finished(item);
+                    track_finish(item);
+                    if (callback != null) {
+                        callback.onfinished(item);
+                    }
                 } else if (msg.command.equals("quit")) {
                     break;
                 } else {
@@ -98,8 +114,8 @@ public class Watcher extends Thread implements PlayerWrapper.Callback {
         tx.offer(new QueuedMessage("quit"));
     }
 
-    private void track_finished(Item item) {
-        Logger.info(this, "track finished '" + item.filename() + "'");
+    private void track_finish(Item item) {
+        Logger.debug(this, "track finished '" + item.filename() + "'");
         onstop(item);
         set_now_playing(null);
     }
@@ -107,7 +123,7 @@ public class Watcher extends Thread implements PlayerWrapper.Callback {
     private void track_error(Item item) {
         Logger.error(this, "playback error " + item.filename());
         onerror(item, "error");
-        track_finished(item);
+        track_finish(item);
     }
 
     private synchronized Item get_now_playing() {

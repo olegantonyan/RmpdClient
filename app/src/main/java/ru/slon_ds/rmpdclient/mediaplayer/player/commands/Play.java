@@ -16,9 +16,9 @@ public class Play extends BaseCommand {
         String path = options.fetch("item", Item.class, null).filepath();
         Logger.info(this, "starting track " + path);
         video_view.setVideoPath(path);
-        video_view.setZOrderOnTop(true);
-        video_view.requestFocus();
         video_view.start();
+       // video_view.setZOrderOnTop(true);
+       // video_view.requestFocus();
         return new KWargs();
     }
 }
