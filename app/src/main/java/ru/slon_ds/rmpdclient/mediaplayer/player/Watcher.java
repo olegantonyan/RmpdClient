@@ -8,7 +8,7 @@ import ru.slon_ds.rmpdclient.remotecontrol.ProtocolDispatcher;
 import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
-public class Watcher extends Thread implements PlayerWrapper.Callback {
+public class Watcher implements Runnable, PlayerWrapper.Callback {
     private PlayerWrapper player_wrapper = null;
     private PriorityBlockingQueue<QueuedMessage> tx = null;
     private LinkedBlockingQueue<KWargs> rx = null;
@@ -28,7 +28,7 @@ public class Watcher extends Thread implements PlayerWrapper.Callback {
         player_wrapper.set_callback(this);
         tx = new PriorityBlockingQueue<>();
         rx = new LinkedBlockingQueue<>();
-        start();
+        new Thread(this).start();
     }
 
     public void play(Item item) {
@@ -37,7 +37,7 @@ public class Watcher extends Thread implements PlayerWrapper.Callback {
             return;
         }
         if (is_playing()) {
-            stop_playback();
+            stop();
         }
         KWargs options = new KWargs();
         options.put("item", item);
@@ -46,10 +46,18 @@ public class Watcher extends Thread implements PlayerWrapper.Callback {
         onplay(item);
     }
 
-    public void stop_playback() {
+    public void stop() {
         Item current = get_now_playing();
         execute("stop");
         track_finish(current);
+    }
+
+    public void suspend() {
+
+    }
+
+    public void resume(Item item, Integer position_ms) {
+
     }
 
     public boolean is_playing() {
@@ -58,6 +66,10 @@ public class Watcher extends Thread implements PlayerWrapper.Callback {
 
     public Integer percent_pos() {
         return execute("percent_pos").fetch("result", Integer.class, 0);
+    }
+
+    public Integer time_pos() {
+        return execute("time_pos").fetch("result", Integer.class, 0);
     }
 
     public String filename() {

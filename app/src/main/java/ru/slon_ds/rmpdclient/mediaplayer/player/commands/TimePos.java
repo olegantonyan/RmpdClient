@@ -12,11 +12,12 @@ public class TimePos extends BaseCommand {
     @Override
     public KWargs call() {
         KWargs result = new KWargs();
-        int seconds = 0;
+        int ms = 0;
         if (video_view.isPlaying()) {
-            seconds = video_view.getCurrentPosition() / 1000;
+            ms = video_view.getCurrentPosition();
         }
-        result.put("result", seconds);
+        result.put("result", ms);
+        result.put("units", "ms");
         return result;
     }
 }

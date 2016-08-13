@@ -36,19 +36,35 @@ public class Item {
     }
 
     public TimeOnly begin_time() {
-        return new TimeOnly(d.fetch("begin_time", String.class));
+        String s = d.fetch("begin_time", String.class);
+        if (s == null) {
+            return null;
+        }
+        return new TimeOnly(s);
     }
 
     public TimeOnly end_time() {
-        return new TimeOnly(d.fetch("end_time", String.class));
+        String s = d.fetch("end_time", String.class);
+        if (s == null) {
+            return null;
+        }
+        return new TimeOnly(s);
     }
 
     public DateOnly begin_date() {
-        return new DateOnly(d.fetch("begin_date", String.class));
+        String s = d.fetch("begin_date", String.class);
+        if (s == null) {
+            return null;
+        }
+        return new DateOnly(s);
     }
 
     public DateOnly end_date() {
-        return new DateOnly(d.fetch("end_date", String.class));
+        String s = d.fetch("end_date", String.class);
+        if (s == null) {
+            return null;
+        }
+        return new DateOnly(s);
     }
 
     public Integer playbacks_per_day() {
@@ -118,6 +134,10 @@ public class Item {
         }
         DateOnly dt = new DateOnly(date);
         return begin_date().less_or_equal(dt) && dt.less_or_equal(end_date());
+    }
+
+    public String toString() {
+        return filename();
     }
 }
 

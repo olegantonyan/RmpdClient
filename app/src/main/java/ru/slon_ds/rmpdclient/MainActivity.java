@@ -6,11 +6,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.VideoView;
 
-import java.util.Date;
-
-import ru.slon_ds.rmpdclient.utils.DateOnly;
-import ru.slon_ds.rmpdclient.utils.Logger;
-import ru.slon_ds.rmpdclient.utils.TimeOnly;
+import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerWrapper;
 
 public class MainActivity extends AppCompatActivity {
     @Override
@@ -38,8 +34,8 @@ public class MainActivity extends AppCompatActivity {
         video_view.requestFocus();
         video_view.start();*/
 
-        //new Main(new PlayerWrapper(video_view)).start();
-        Logger.error(this, new TimeOnly(new Date()).toString());
-        Logger.error(this, new DateOnly(new Date()).toString());
+        new Main(new PlayerWrapper(video_view)).start();
+        //Logger.error(this, new TimeOnly(new Date()).toString());
+        //Logger.error(this, new DateOnly(new Date()).toString());
     }
 }

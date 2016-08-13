@@ -38,7 +38,7 @@ public class PlayerController {
     }
 
     public void stop() {
-        player.stop_playback();
+        player.stop();
     }
 
     public void quit() {

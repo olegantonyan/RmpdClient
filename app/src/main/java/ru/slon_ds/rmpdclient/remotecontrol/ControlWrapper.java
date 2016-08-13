@@ -7,7 +7,7 @@ import ru.slon_ds.rmpdclient.utils.Config;
 import ru.slon_ds.rmpdclient.utils.JsonDict;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
-public class ControlWrapper extends Thread {
+public class ControlWrapper implements Runnable {
     private OnMessageCallback callback = null;
 
     interface OnMessageCallback {
@@ -16,7 +16,7 @@ public class ControlWrapper extends Thread {
 
     public ControlWrapper(OnMessageCallback callback) {
         this.callback = callback;
-        start();
+        new Thread(this).start();
     }
 
     public boolean send(JsonDict message) {
