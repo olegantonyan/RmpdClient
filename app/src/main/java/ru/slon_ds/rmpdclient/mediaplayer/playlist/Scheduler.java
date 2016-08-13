@@ -4,21 +4,25 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import ru.slon_ds.rmpdclient.mediaplayer.player.Watcher;
+import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerWrapper;
+import ru.slon_ds.rmpdclient.remotecontrol.ProtocolDispatcher;
 import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
-public class Scheduler implements Runnable, Watcher.Callback {
-    private Watcher player = null;
+public class Scheduler implements Runnable, PlayerWrapper.Callback {
+    private PlayerProxy player = null;
     private BlockingQueue<KWargs> queue = null;
     private Playlist playlist = null;
-    private Item now_playing = null;
+    private NowPlaying now_playing = null;
     private PreemptedTrack preempted_track = null;
+    private PlaybackEvents events = null;
 
-    public Scheduler(Watcher w) {
+    public Scheduler(PlayerWrapper player_wrapper) {
         queue = new LinkedBlockingQueue<>();
-        player = w;
-        player.set_callback(this);
+        player_wrapper.set_callback(this);
+        events = new PlaybackEvents(ProtocolDispatcher.instance());
+        now_playing = new NowPlaying();
+        player = new PlayerProxy(player_wrapper, events, now_playing);
         new Thread(this).start();
     }
 
@@ -29,11 +33,27 @@ public class Scheduler implements Runnable, Watcher.Callback {
     }
 
     @Override
-    public void onfinished(Item item) {
-        if (item != null) {
-            Logger.info(this, "track finished " + item.filename());
-        }
+    public void onfinished() {
         schedule("track_finished");
+    }
+
+    @Override
+    public void onerror() {
+        events.onerror(now_playing.get(), "todo: get error message");
+        Logger.error(this, "track error");
+        onfinished();
+    }
+
+    public String current_track_filename() {
+        Item i = now_playing.get();
+        if (i == null) {
+            return null;
+        }
+        return i.filename();
+    }
+
+    public Integer current_track_percent_pos() {
+        return player.percent_pos();
     }
 
     private void schedule(String command) {
@@ -54,8 +74,8 @@ public class Scheduler implements Runnable, Watcher.Callback {
         if (player.is_playing()) {
             play(null);
         }
-        set_now_playing(null);
-        // reset preempted
+        now_playing.set(null);
+        reset_preempted();
         Item start_item = playlist.first_background();
         if (start_item == null) {
             Logger.info(this, "no appropriate track to start playlist from");
@@ -65,9 +85,15 @@ public class Scheduler implements Runnable, Watcher.Callback {
     }
 
     private void track_finished() {
-        Item track = get_now_playing();
-        notify_playlist_on_track_finished(track);
-        set_now_playing(null);
+        Item track = now_playing.get();
+        if (track != null) {
+            Logger.info(this, "track finished '" + track.filename() + "'");
+            notify_playlist_on_track_finished(track);
+        } else {
+            Logger.warning(this, "track finished null");
+        }
+        now_playing.set(null);
+        events.onstop(track);
     }
 
     private void notify_playlist_on_track_finished(Item item) {
@@ -78,25 +104,28 @@ public class Scheduler implements Runnable, Watcher.Callback {
 
     private void play(Item item) {
         if (item == null) {
-            set_now_playing(null);
-            player.stop();
+            now_playing.set(null);
+            stop();
             return;
         }
         if (player.is_playing()) {
             if (item.is_advertising()) {
-                preempt(get_now_playing(), player.time_pos());
-                player.suspend();
-            } else {
-                player.stop();
+                preempt(now_playing.get(), player.time_pos());
             }
+            stop();
         }
         player.play(item);
-        set_now_playing(item);
+        now_playing.set(item);
+    }
+
+    private void stop() {
+        player.stop();
+        schedule("track_finished");
     }
 
     private void resume(Item item, Integer position_ms) {
         player.resume(item, position_ms);
-        set_now_playing(item);
+        now_playing.set(item);
     }
 
     @Override
@@ -122,19 +151,6 @@ public class Scheduler implements Runnable, Watcher.Callback {
                 }
             }
         }
-    }
-
-    private synchronized void set_now_playing(Item item) {
-        if (item == null) {
-            Logger.debug(this, "set now playing null");
-        } else {
-            Logger.debug(this, "set now playing " + item.toString());
-        }
-        now_playing = item;
-    }
-
-    private synchronized Item get_now_playing() {
-        return now_playing;
     }
 
     private synchronized void preempt(Item item, Integer position_ms) {

@@ -21,7 +21,7 @@ public class PlayerWrapper extends Handler implements MediaPlayer.OnErrorListene
     private Callback callback = null;
     private BlockingQueue<KWargs> queue = null;
 
-    interface Callback {
+    public interface Callback {
         void onfinished();
         void onerror();
     }
@@ -43,6 +43,10 @@ public class PlayerWrapper extends Handler implements MediaPlayer.OnErrorListene
         msg.setData(bundle);
         sendMessage(msg);
         return queue.take();
+    }
+
+    public KWargs execute(String command) throws InterruptedException {
+        return execute(command, new KWargs());
     }
 
     public void set_callback(Callback cb) {
