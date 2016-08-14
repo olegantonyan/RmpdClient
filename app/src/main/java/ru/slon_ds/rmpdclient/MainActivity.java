@@ -7,8 +7,11 @@ import android.view.WindowManager;
 import android.widget.VideoView;
 
 import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerWrapper;
+import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class MainActivity extends AppCompatActivity {
+    private Main main = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,23 +22,25 @@ public class MainActivity extends AppCompatActivity {
         VideoView video_view = (VideoView) findViewById(R.id.videoView);
         video_view.setZOrderOnTop(true);
         video_view.requestFocus();
+        main = new Main(new PlayerWrapper(video_view));
+    }
 
-        /*String address = "https://ia800201.us.archive.org/22/items/ksnn_compilation_master_the_internet/ksnn_compilation_master_the_internet_512kb.mp4";
-        Uri uri = Uri.parse(address);
-        video_view.setVideoPath("/mnt/sdcard/external_sdcard/elixir_for_rubyist.mp4");
-        video_view.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-            @Override
-            public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
-                Logger.error(this, "video error");
-                return false;
-            }
-        });
-        video_view.setZOrderOnTop(true);
-        video_view.requestFocus();
-        video_view.start();*/
+    @Override
+    protected void onStart() {
+        super.onStart();
 
-        new Main(new PlayerWrapper(video_view)).start();
-        //Logger.error(this, new TimeOnly(new Date()).toString());
-        //Logger.error(this, new DateOnly(new Date()).toString());
+        if (main != null) {
+            Logger.debug(this, "starting main");
+            main.start();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (main != null) {
+            Logger.debug(this, "stopping main");
+            main.interrupt();
+        }
     }
 }

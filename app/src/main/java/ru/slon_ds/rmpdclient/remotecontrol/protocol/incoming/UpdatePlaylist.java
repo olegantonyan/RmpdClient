@@ -88,7 +88,7 @@ class DownloadWorkerManager {
     public synchronized void start(ArrayList<URL> urls, Integer seq, DownloadWorker.OnDownloadFinishedCallback callback) {
         if (worker != null && worker.isAlive()) {
             Logger.warning(this, "trying to start update worker while another one is active, terminating");
-            worker.soft_stop();
+            worker.interrupt();
             try {
                 worker.join();
             } catch (InterruptedException e) {
@@ -106,7 +106,6 @@ class DownloadWorker extends Thread {
     private ArrayList<URL> urls = new ArrayList<>();
     private Integer seq = 0;
     private OnDownloadFinishedCallback callback = null;
-    private boolean stop_flag = false;
 
     interface OnDownloadFinishedCallback {
         void onfinished(boolean ok, Integer seq, String message);
@@ -126,7 +125,7 @@ class DownloadWorker extends Thread {
         try {
             HttpClient http = http_client();
             for (URL url : urls) {
-                if (stop_flag) {
+                if (isInterrupted()) {
                     message = "terminated";
                     Logger.warning(this, message);
                     break;
@@ -146,7 +145,7 @@ class DownloadWorker extends Thread {
             ok = false;
             Logger.exception(this, message, e);
         } finally {
-            if (callback != null && !stop_flag) {
+            if (callback != null && !isInterrupted()) {
                 callback.onfinished(ok, seq, message);
             }
         }
@@ -165,10 +164,6 @@ class DownloadWorker extends Thread {
                 current.delete();
             }
         }
-    }
-
-    public void soft_stop() {
-        this.stop_flag = true;
     }
 
     private HttpClient http_client() throws MalformedURLException {

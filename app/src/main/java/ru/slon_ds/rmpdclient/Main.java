@@ -19,7 +19,7 @@ public class Main extends Thread {
         ProtocolDispatcher proto = ProtocolDispatcher.instance();
         PlayerController player = new PlayerController(player_wrapper);
         player.start_playlist();
-        while (true) {
+        while (!isInterrupted()) {
             KWargs kw = new KWargs();
             kw.put("percent_position", player.current_track_position());
             kw.put("track", player.current_track_name());
@@ -32,5 +32,9 @@ public class Main extends Thread {
                 break;
             }
         }
+        Logger.info(this, "finishing main");
+        player.quit();
+        proto.quit();
     }
+
 }

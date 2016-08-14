@@ -19,6 +19,7 @@ import java.net.URL;
 import ru.slon_ds.rmpdclient.AndroidApplication;
 import ru.slon_ds.rmpdclient.utils.Files;
 import ru.slon_ds.rmpdclient.utils.JsonDict;
+import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class HttpClient {
     private URL server_url;
@@ -75,6 +76,10 @@ public class HttpClient {
             byte[] buffer = new byte[2048];
             int bufferLength;
             while ((bufferLength = is.read(buffer)) > 0) {
+                if (Thread.currentThread().isInterrupted()) {
+                    Logger.warning(this, "download interrupted");
+                    break;
+                }
                 os.write(buffer, 0, bufferLength);
             }
             os.flush();

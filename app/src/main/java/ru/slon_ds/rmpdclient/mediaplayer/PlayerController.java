@@ -41,4 +41,9 @@ public class PlayerController {
     public Integer current_track_position() {
         return scheduler.current_track_percent_pos();
     }
+
+    public void quit() {
+        scheduler.quit();
+        _instance = null;
+    }
 }

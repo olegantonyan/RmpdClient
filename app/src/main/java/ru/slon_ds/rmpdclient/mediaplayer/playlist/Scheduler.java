@@ -17,6 +17,7 @@ public class Scheduler implements Runnable, PlayerWrapper.Callback {
     private NowPlaying now_playing = null;
     private PreemptedTrack preempted_track = null;
     private PlaybackEvents events = null;
+    private Thread thread = null;
 
     public Scheduler(PlayerWrapper player_wrapper) {
         queue = new LinkedBlockingQueue<>();
@@ -24,7 +25,8 @@ public class Scheduler implements Runnable, PlayerWrapper.Callback {
         events = new PlaybackEvents(ProtocolDispatcher.instance());
         now_playing = new NowPlaying();
         player = new PlayerProxy(player_wrapper, events, now_playing);
-        new Thread(this).start();
+        thread = new Thread(this);
+        thread.start();
     }
 
     public void set_playlist(Playlist p) {
@@ -54,6 +56,13 @@ public class Scheduler implements Runnable, PlayerWrapper.Callback {
 
     public Integer current_track_percent_pos() {
         return player.percent_pos();
+    }
+
+    public void quit() {
+        if (thread != null) {
+            Logger.warning(this, "scheduler was told to quit...");
+            thread.interrupt();
+        }
     }
 
     private void schedule(String command) {
@@ -160,7 +169,8 @@ public class Scheduler implements Runnable, PlayerWrapper.Callback {
 
     @Override
     public void run() {
-        while (true) {
+        Logger.debug(this, "entering scheduler loop");
+        while (!thread.isInterrupted()) {
             try {
                 KWargs msg = queue.poll(1, TimeUnit.SECONDS);
                 if (msg != null && msg.fetch("command", String.class, null).equals("track_finished")) {
@@ -169,7 +179,7 @@ public class Scheduler implements Runnable, PlayerWrapper.Callback {
                     start_playlist();
                 }
             } catch (InterruptedException e) {
-                Logger.exception(this, "scheduler loop interrupted", e);
+                Logger.warning(this, "scheduler loop interrupted");
                 break;
             } catch (Exception e) {
                 Logger.exception(this, "error processing scheduler command", e);
@@ -183,6 +193,7 @@ public class Scheduler implements Runnable, PlayerWrapper.Callback {
                 }
             }
         }
+        Logger.debug(this, "stopping scheduler loop");
     }
 
     private synchronized void preempt(Item item, Integer position_ms) {

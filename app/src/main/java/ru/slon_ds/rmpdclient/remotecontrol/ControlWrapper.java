@@ -9,6 +9,7 @@ import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class ControlWrapper implements Runnable {
     private OnMessageCallback callback = null;
+    private Thread thread = null;
 
     interface OnMessageCallback {
         void onmessage(JsonDict msg, Integer seq);
@@ -16,7 +17,8 @@ public class ControlWrapper implements Runnable {
 
     public ControlWrapper(OnMessageCallback callback) {
         this.callback = callback;
-        new Thread(this).start();
+        thread = new Thread(this);
+        thread.start();
     }
 
     public boolean send(JsonDict message) {
@@ -57,10 +59,18 @@ public class ControlWrapper implements Runnable {
         return result;
     }
 
+    public void quit() {
+        if (thread != null) {
+            Logger.warning(this, "control wrapper was told to quit...");
+            thread.interrupt();
+        }
+    }
+
     @Override
     public void run() {
+        Logger.debug(this, "entering check queue loop");
         MessageQueue mq = mq();
-        while (true) {
+        while (!thread.isInterrupted()) {
             try {
                 MessageQueue.DequeueResult dequeued = mq.dequeue();
                 if (dequeued != null) {
@@ -76,7 +86,7 @@ public class ControlWrapper implements Runnable {
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
-                Logger.warning(this, "interrupted");
+                Logger.warning(this, "control wrapper loop interrupted");
                 break;
             }
         }
