@@ -1,5 +1,6 @@
 package ru.slon_ds.rmpdclient.mediaplayer.playlist;
 
+import java.util.Date;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -38,9 +39,8 @@ public class Scheduler implements Runnable, PlayerWrapper.Callback {
     }
 
     @Override
-    public void onerror() {
-        events.onerror(now_playing.get(), "todo: get error message");
-        Logger.error(this, "track error");
+    public void onerror(String message) {
+        events.onerror(now_playing.get(), message);
         onfinished();
     }
 
@@ -67,7 +67,37 @@ public class Scheduler implements Runnable, PlayerWrapper.Callback {
     }
 
     private void scheduler() {
+        Item current_track = now_playing.get();
 
+        if (current_track != null && current_track.is_background()) {
+            Date thetime = new Date();
+            if (!current_track.is_appropriate_at(thetime) && !current_track.is_wait_for_the_end()) {
+                Logger.info(this, "track stopped because it is out of time range");
+                play(null);
+            }
+        }
+
+        Item next_advertising = playlist.next_advertizing();
+        if (next_advertising != null) {
+            if (current_track == null || current_track.is_background()) {
+                play(next_advertising);
+            }
+        } else {
+            PreemptedTrack preempt = preempted();
+            if (preempt != null) {
+                if (current_track == null) {
+                    resume(preempt.item, preempt.position_ms);
+                    reset_preempted();
+                }
+            } else {
+                Item next_background = playlist.next_background();
+                if (next_background != null) {
+                    if (current_track == null) {
+                        play(next_background);
+                    }
+                }
+            }
+        }
     }
 
     private void start_playlist() {
@@ -105,26 +135,26 @@ public class Scheduler implements Runnable, PlayerWrapper.Callback {
     private void play(Item item) {
         if (item == null) {
             now_playing.set(null);
-            stop();
+            player.stop();
+            track_finished();
             return;
         }
         if (player.is_playing()) {
             if (item.is_advertising()) {
                 preempt(now_playing.get(), player.time_pos());
+                player.suspend();
+            } else {
+                track_finished();
+                player.stop();
             }
-            stop();
         }
         player.play(item);
         now_playing.set(item);
     }
 
-    private void stop() {
-        player.stop();
-        schedule("track_finished");
-    }
-
     private void resume(Item item, Integer position_ms) {
         player.resume(item, position_ms);
+        Logger.info(this, "track resumed '" + item.filename() + "' at " + position_ms.toString() + " ms");
         now_playing.set(item);
     }
 
@@ -145,7 +175,9 @@ public class Scheduler implements Runnable, PlayerWrapper.Callback {
                 Logger.exception(this, "error processing scheduler command", e);
             } finally {
                 try {
-                    scheduler();
+                    if (playlist != null) {
+                        scheduler();
+                    }
                 } catch (Exception e) {
                     Logger.exception(this, "error running scheduler", e);
                 }
@@ -154,6 +186,7 @@ public class Scheduler implements Runnable, PlayerWrapper.Callback {
     }
 
     private synchronized void preempt(Item item, Integer position_ms) {
+        Logger.info(this, "track suspended '" + item.filename() + "' at " + position_ms.toString() + " ms");
         preempted_track = new PreemptedTrack(item, position_ms);
     }
 
@@ -162,6 +195,7 @@ public class Scheduler implements Runnable, PlayerWrapper.Callback {
     }
 
     private synchronized void reset_preempted() {
+        Logger.debug(this, "reset preempted state");
         preempted_track = null;
     }
 

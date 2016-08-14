@@ -26,6 +26,7 @@ public class PlaybackEvents {
         KWargs options = new KWargs();
         options.put("item", item);
         options.put("position_ms", position_ms);
+        options.put("position_seconds", position_ms / 1000);
         proto.send("track_suspend", options);
     }
 
@@ -33,6 +34,7 @@ public class PlaybackEvents {
         KWargs options = new KWargs();
         options.put("item", item);
         options.put("position_ms", position_ms);
+        options.put("position_seconds", position_ms / 1000);
         proto.send("track_resume", options);
     }
 

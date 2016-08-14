@@ -23,7 +23,7 @@ public class PlayerWrapper extends Handler implements MediaPlayer.OnErrorListene
 
     public interface Callback {
         void onfinished();
-        void onerror();
+        void onerror(String message);
     }
 
     public PlayerWrapper(VideoView vv) {
@@ -63,9 +63,10 @@ public class PlayerWrapper extends Handler implements MediaPlayer.OnErrorListene
 
     @Override
     public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
-        Logger.error(this, String.format(Locale.US, "playback error (%d, %d)", i, i1));
+        String message = String.format(Locale.US, "playback error (%d, %d)", i, i1);
+        Logger.error(this, message);
         if (callback != null) {
-            callback.onerror();
+            callback.onerror(message);
         }
         return false;
     }

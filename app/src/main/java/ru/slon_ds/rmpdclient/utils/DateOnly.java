@@ -10,9 +10,9 @@ public class DateOnly implements Comparable<DateOnly> {
     private Integer day = null;
 
     public DateOnly(String date) throws IllegalArgumentException {
-        String parts[] = date.split(".");
+        String parts[] = date.split("\\.");
         if (parts.length != 3) {
-            throw new IllegalArgumentException("invalid date format, only %d.%m.%Y is supported");
+            throw new IllegalArgumentException("invalid date format '" + date + "', only %d.%m.%Y is supported");
         }
         year = Integer.valueOf(parts[2]);
         month = Integer.valueOf(parts[1]);
