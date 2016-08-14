@@ -68,7 +68,7 @@ public class PlayerWrapper extends Handler implements MediaPlayer.OnErrorListene
         if (callback != null) {
             callback.onerror(message);
         }
-        return false;
+        return true;
     }
 
     @Override
