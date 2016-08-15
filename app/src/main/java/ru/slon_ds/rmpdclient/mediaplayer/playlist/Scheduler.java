@@ -110,16 +110,18 @@ public class Scheduler implements Runnable, PlayerWrapper.Callback {
     }
 
     private void start_playlist() {
-        if (player.is_playing()) {
+        if (player.is_playing() || playlist == null) {
             play(null);
         }
         now_playing.set(null);
         reset_preempted();
-        Item start_item = playlist.first_background();
-        if (start_item == null) {
-            Logger.info(this, "no appropriate track to start playlist from");
-        } else {
-            play(start_item);
+        if (playlist != null) {
+            Item start_item = playlist.first_background();
+            if (start_item == null) {
+                Logger.info(this, "no appropriate track to start playlist from");
+            } else {
+                play(start_item);
+            }
         }
     }
 

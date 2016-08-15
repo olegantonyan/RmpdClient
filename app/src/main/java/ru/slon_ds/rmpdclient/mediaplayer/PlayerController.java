@@ -31,6 +31,7 @@ public class PlayerController {
             scheduler.set_playlist(playlist);
         } else {
             Logger.error(this, "playlist file '" + loader.filepath() + "' does not exists");
+            scheduler.set_playlist(null);
         }
     }
 
