@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="ru.slon_ds.rmpdclient.MainActivity"
-    android:keepScreenOn="true">
+    android:keepScreenOn="true"
+    android:background="@color/black" >
 
     <VideoView android:id="@+id/videoView"
         android:layout_width="match_parent"
