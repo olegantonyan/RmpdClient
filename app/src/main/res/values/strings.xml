@@ -15,6 +15,10 @@
     <string name="pref_description_storage_path">Path to be used for files storage</string>
     <string name="pref_key_storage_path">Path to be used for files storage</string>
 
+    <string name="pref_description_autostart">Start automatically on boot</string>
+    <string name="pref_title_autostart">Autostart on boot</string>
+    <string name="pref_key_autostart">autostart</string>
+
 
     <!-- Settings for Network -->
     <string name="pref_header_network">Network</string>
