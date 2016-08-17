@@ -26,6 +26,9 @@ public class Logger {
     }
 
     private static String tag(Object source) {
+        if (source instanceof String) {
+            return (String) source;
+        }
         return source.getClass().getName().replace(AndroidApplication.context().getPackageName(), "");
     }
 }

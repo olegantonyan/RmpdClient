@@ -17,10 +17,28 @@ import ru.slon_ds.rmpdclient.AndroidApplication;
 
 public class Files {
     public static String mediafiles_path() {
-        String result = base_storage_path() + "/mediafiles";
+        String result = Config.instance().storage_path() + "/mediafiles";
         create_path_if_not_exists(result);
         return result;
     }
+
+    public static String temp_path() {
+        String result = Config.instance().storage_path() + "/temp"; //AndroidApplication.context().getCacheDir().getAbsolutePath();
+        create_path_if_not_exists(result);
+        return result;
+    }
+
+    public static String base_storage_path() {
+        String ext = external_sdcard_path();
+        if (ext == null) {
+            ext = Environment.getExternalStorageDirectory().getAbsolutePath();
+        }
+        String result = ext + "/" + AndroidApplication.context().getPackageName();
+        create_path_if_not_exists(result);
+        return result;
+    }
+
+
 
     public static URL full_url_by_relative(String relative) throws MalformedURLException {
         if (relative.startsWith("http")) {
@@ -36,27 +54,6 @@ public class Files {
 
     public static String full_file_localpath(String relative_url) {
         return mediafiles_path() + "/" + file_basename(relative_url);
-    }
-
-    public static String temp_path() {
-        String result = base_storage_path() + "/temp"; //AndroidApplication.context().getCacheDir().getAbsolutePath();
-        create_path_if_not_exists(result);
-        return result;
-    }
-
-    public static String base_storage_path() {
-        String ext = external_sdcard_path();
-        if (ext == null) {
-            ext = Environment.getExternalStorageDirectory().getAbsolutePath();
-        }
-        String result = ext + "/" + AndroidApplication.context().getPackageName();
-        create_path_if_not_exists(result);
-        return result;
-    }
-
-    public static boolean create_path_if_not_exists(String path) {
-        File f = new File(path);
-        return f.exists() || f.mkdirs();
     }
 
     public static void copy_file(String src, String dst) throws IOException {
@@ -124,5 +121,10 @@ public class Files {
             return mounts.get(0);
         }
         return null;
+    }
+
+    private static boolean create_path_if_not_exists(String path) {
+        File f = new File(path);
+        return f.exists() || f.mkdirs();
     }
 }

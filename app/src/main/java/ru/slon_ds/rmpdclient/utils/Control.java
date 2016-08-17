@@ -2,6 +2,8 @@ package ru.slon_ds.rmpdclient.utils;
 
 import android.os.StatFs;
 
+import java.io.DataOutputStream;
+
 public class Control {
     public static Long free_space(String path) {
         try {
@@ -11,6 +13,21 @@ public class Control {
             return available_blocks * block_size;
         } catch (Exception e) {
             return 0L;
+        }
+    }
+
+    public static boolean set_systemui_disabled(boolean disabled) {
+        try {
+            Process process = Runtime.getRuntime().exec("su");
+            DataOutputStream os = new DataOutputStream(process.getOutputStream());
+            os.writeBytes("pm " + (disabled ? "disable" : "enable") + " com.android.systemui\n");
+            os.flush();
+            os.writeBytes("exit\n");
+            os.flush();
+            process.waitFor();
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 }

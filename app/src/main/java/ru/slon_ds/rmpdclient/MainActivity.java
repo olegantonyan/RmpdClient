@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.VideoView;
 
 import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerWrapper;
+import ru.slon_ds.rmpdclient.utils.Config;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
@@ -34,11 +35,21 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         video_view.requestFocus();
         video_view.setOnTouchListener(this);
 
+        Config.instance().load_defaults();
 
         /*ActionBar a = getSupportActionBar();
         if (a != null) a.hide();
         android.app.ActionBar b = getActionBar();
         if (b != null) b.hide();*/
+
+        if (Config.instance().first_run()) {
+            launch_settings_activity();
+        }
+    }
+
+    private void launch_settings_activity() {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -58,11 +69,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             Logger.debug(this, "stopping main");
             main.interrupt();
         }
-    }
-
-    private void launch_settings_activity() {
-        Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
     }
 
     @Override
