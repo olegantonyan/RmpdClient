@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SLON-DS Плеер</string>
-    <string name="pref_default_login" translatable="false"></string>
     <string name="pref_description_autostart">Запускать автоматически при загрузке устройства</string>
     <string name="pref_description_disable_sustemui">Удалить панель с аппаратными кнопками и часами. Требуется root-доступ. Для применения требуется перезагрузка</string>
     <string name="pref_description_storage_path">Каталог для сохранения медиа и иных больших файлов</string>
     <string name="pref_header_general">Основные</string>
     <string name="pref_header_network">Сеть</string>
-    <string name="pref_key_autostart"></string>
     <string name="pref_title_login">Логин устройства на сервере</string>
     <string name="pref_title_password">Пароль устройства на сервере</string>
     <string name="pref_title_server_uri">Адрес сервера</string>
     <string name="pref_title_storage_path">Каталог хранения файлов</string>
     <string name="title_activity_settings">Настройки</string>
-    <string name="pref_title_autostart" translatable="false">Автозапуск при загрузке</string>
+    <string name="pref_title_autostart">Автозапуск при загрузке</string>
     <string name="pref_title_disable_sustemui">Удалить системные элементы интерфейса</string>
 </resources>
