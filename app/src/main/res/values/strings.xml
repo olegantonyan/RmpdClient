@@ -27,11 +27,11 @@
     <string name="pref_title_server_uri">Server URI</string>
     <string name="pref_key_server_uri" translatable="false">server_uri</string>
 
-    <string name="pref_default_login" translatable="false">demo_android</string>
+    <string name="pref_default_login" translatable="false"></string>
     <string name="pref_title_login">Device login</string>
     <string name="pref_key_login" translatable="false">login</string>
 
-    <string name="pref_default_password" translatable="false">12345678</string>
+    <string name="pref_default_password" translatable="false"></string>
     <string name="pref_title_password">Device password</string>
     <string name="pref_key_password" translatable="false">password</string>
 
