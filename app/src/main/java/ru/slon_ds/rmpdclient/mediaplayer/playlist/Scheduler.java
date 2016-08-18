@@ -130,11 +130,11 @@ public class Scheduler implements Runnable, PlayerWrapper.Callback {
         if (track != null) {
             Logger.info(this, "track finished '" + track.filename() + "'");
             notify_playlist_on_track_finished(track);
+            events.onstop(track);
         } else {
             Logger.warning(this, "track finished null");
         }
         now_playing.set(null);
-        events.onstop(track);
     }
 
     private void notify_playlist_on_track_finished(Item item) {
