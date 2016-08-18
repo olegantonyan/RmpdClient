@@ -8,31 +8,31 @@
     <string name="pref_header_general">General</string>
 
     <string name="pref_title_disable_sustemui">Disable system UI</string>
-    <string name="pref_key_disable_sustemui">disable_systemui</string>
+    <string name="pref_key_disable_sustemui" translatable="false">disable_systemui</string>
     <string name="pref_description_disable_sustemui">Remove action bar and HW buttons. Requires root access. Reboot to apply</string>
 
     <string name="pref_title_storage_path">Storage path</string>
     <string name="pref_description_storage_path">Path to be used for files storage</string>
-    <string name="pref_key_storage_path">Path to be used for files storage</string>
+    <string name="pref_key_storage_path" translatable="false">Path to be used for files storage</string>
 
     <string name="pref_description_autostart">Start automatically on boot</string>
     <string name="pref_title_autostart">Autostart on boot</string>
-    <string name="pref_key_autostart">autostart</string>
+    <string name="pref_key_autostart" translatable="false">autostart</string>
 
 
     <!-- Settings for Network -->
     <string name="pref_header_network">Network</string>
 
-    <string name="pref_default_server_uri">https://server.slon-ds.ru</string>
+    <string name="pref_default_server_uri" translatable="false">https://server.slon-ds.ru</string>
     <string name="pref_title_server_uri">Server URI</string>
-    <string name="pref_key_server_uri">server_uri</string>
+    <string name="pref_key_server_uri" translatable="false">server_uri</string>
 
-    <string name="pref_default_login">demo_android</string>
+    <string name="pref_default_login" translatable="false">demo_android</string>
     <string name="pref_title_login">Device login</string>
-    <string name="pref_key_login">login</string>
+    <string name="pref_key_login" translatable="false">login</string>
 
-    <string name="pref_default_password">12345678</string>
+    <string name="pref_default_password" translatable="false">12345678</string>
     <string name="pref_title_password">Device password</string>
-    <string name="pref_key_password">password</string>
+    <string name="pref_key_password" translatable="false">password</string>
 
 </resources>
