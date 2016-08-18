@@ -10,6 +10,7 @@ import ru.slon_ds.rmpdclient.utils.Logger;
 public class ControlWrapper implements Runnable {
     private OnMessageCallback callback = null;
     private Thread thread = null;
+    private int errors_count = 0;
 
     interface OnMessageCallback {
         void onmessage(JsonDict msg, Integer seq);
@@ -53,8 +54,9 @@ public class ControlWrapper implements Runnable {
                     result = true;
                 }
             }
+            errors_count = 0;
         } catch (Exception e) {
-            Logger.exception(this, "error sending message '" + message.toString() + "'", e);
+            log_error(e, message.toString());
         }
         return result;
     }
@@ -111,5 +113,17 @@ public class ControlWrapper implements Runnable {
         if (callback != null) {
             callback.onmessage(msg, sequence_number);
         }
+    }
+
+    private void log_error(Exception e, String message) {
+        if (errors_count >= 5) {
+            return;
+        }
+        errors_count++;
+        Logger.exception(this, "error sending message '" + message + "'", e);
+        if (errors_count >= 5) {
+            Logger.warning(this, "subsequent send errors omitted until appearing online");
+        }
+
     }
 }
