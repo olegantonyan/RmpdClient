@@ -2,6 +2,8 @@ package ru.slon_ds.rmpdclient.utils;
 
 import android.util.Log;
 
+import java.util.Locale;
+
 import ru.slon_ds.rmpdclient.AndroidApplication;
 
 public class Logger {
@@ -26,9 +28,16 @@ public class Logger {
     }
 
     private static String tag(Object source) {
+        String result;
         if (source instanceof String) {
-            return (String) source;
+            result = (String) source;
+        } else {
+            result = source.getClass().getName().replace(AndroidApplication.context().getPackageName(), "");
         }
-        return source.getClass().getName().replace(AndroidApplication.context().getPackageName(), "");
+        return result + thread_info();
+    }
+
+    private static String thread_info() {
+        return String.format(Locale.US, "[%s]", Thread.currentThread().getName());
     }
 }
