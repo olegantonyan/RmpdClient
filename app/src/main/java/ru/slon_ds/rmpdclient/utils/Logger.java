@@ -69,7 +69,6 @@ class FileLogger {
     private File file = null;
     private String path = null;
     private String filename = null;
-    private boolean verbose = false;
 
     public static FileLogger instance() {
         if (_instance == null) {
@@ -82,12 +81,11 @@ class FileLogger {
         path = Files.logs_path();
         filename = "rmpd.log";
         file = new File(full_filepath());
-        verbose = Config.instance().verbose_logging();
     }
 
     public synchronized boolean write(String level, String tag, String message) {
         level = level.toUpperCase();
-        if (level.equals("DEBUG") && !verbose) {
+        if (level.equals("DEBUG") && !Config.instance().verbose_logging()) {
             return true;
         }
         try {

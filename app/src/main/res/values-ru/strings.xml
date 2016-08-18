@@ -13,4 +13,6 @@
     <string name="title_activity_settings">Настройки</string>
     <string name="pref_title_autostart">Автозапуск при загрузке</string>
     <string name="pref_title_disable_sustemui">Удалить системные элементы интерфейса</string>
+    <string name="pref_title_verbose_logging">Подробное логгирование</string>
+    <string name="pref_description_verbose_logging">Писать подробный лог-файл. Не включайте если точно не уверены что это необходимо</string>
 </resources>

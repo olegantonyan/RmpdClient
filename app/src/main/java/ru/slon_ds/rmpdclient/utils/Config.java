@@ -67,7 +67,7 @@ public class Config {
     }
 
     public boolean verbose_logging() {
-        return false;
+        return preferences().getBoolean(getResources().getString(R.string.pref_key_verbose_logging), false);
     }
 
     private SharedPreferences preferences() {

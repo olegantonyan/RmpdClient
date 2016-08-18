@@ -17,4 +17,10 @@
         android:key="@string/pref_key_disable_sustemui"
         android:title="@string/pref_title_disable_sustemui" />
 
+    <SwitchPreference
+        android:defaultValue="false"
+        android:summary="@string/pref_description_verbose_logging"
+        android:key="@string/pref_key_verbose_logging"
+        android:title="@string/pref_title_verbose_logging" />
+
 </PreferenceScreen>
