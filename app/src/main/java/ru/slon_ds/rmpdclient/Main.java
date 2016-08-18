@@ -16,6 +16,7 @@ public class Main extends Thread {
 
     @Override
     public void run() {
+        Logger.info(this, "started");
         ProtocolDispatcher proto = ProtocolDispatcher.instance();
         PlayerController player = new PlayerController(player_wrapper);
         player.start_playlist();

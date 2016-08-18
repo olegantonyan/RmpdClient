@@ -66,6 +66,10 @@ public class Config {
         return preferences().getString(getResources().getString(R.string.pref_key_storage_path), Files.base_storage_path());
     }
 
+    public boolean verbose_logging() {
+        return false;
+    }
+
     private SharedPreferences preferences() {
         final Context ctx = AndroidApplication.context();
         return PreferenceManager.getDefaultSharedPreferences(ctx);

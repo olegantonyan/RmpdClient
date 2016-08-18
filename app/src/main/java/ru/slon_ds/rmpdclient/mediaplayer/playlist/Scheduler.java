@@ -60,7 +60,7 @@ public class Scheduler implements Runnable, PlayerWrapper.Callback {
 
     public void quit() {
         if (thread != null) {
-            Logger.warning(this, "scheduler was told to quit...");
+            Logger.debug(this, "scheduler was told to quit...");
             thread.interrupt();
         }
     }

@@ -28,6 +28,12 @@ public class Files {
         return result;
     }
 
+    public static String logs_path() {
+        String result = Config.instance().storage_path() + "/logs";
+        create_path_if_not_exists(result);
+        return result;
+    }
+
     public static String base_storage_path() {
         String ext = external_sdcard_path();
         if (ext == null) {

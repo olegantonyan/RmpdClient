@@ -52,9 +52,9 @@ public class ControlWrapper implements Runnable {
                     HttpClient.HttpData received = client.send(message, sequence_number);
                     onreceive(received.data, received.sequence_number);
                     result = true;
+                    errors_count = 0;
                 }
             }
-            errors_count = 0;
         } catch (Exception e) {
             log_error(e, message.toString());
         }
@@ -63,7 +63,7 @@ public class ControlWrapper implements Runnable {
 
     public void quit() {
         if (thread != null) {
-            Logger.warning(this, "control wrapper was told to quit...");
+            Logger.debug(this, "control wrapper was told to quit...");
             thread.interrupt();
         }
     }
