@@ -98,6 +98,7 @@ class FileLogger implements Runnable {
         boolean ok = queue.offer(formatted_message(level, tag, message));
         if (thread == null || !thread.isAlive()) {
             thread = new Thread(this);
+            thread.setPriority(Thread.MIN_PRIORITY);
             thread.start();
         }
         return ok;
