@@ -186,20 +186,20 @@ public class Scheduler implements Runnable, PlayerWrapper.Callback {
                     track_finished();
                 } else if (msg != null && msg.fetch("command", String.class, null).equals("start_playlist")) {
                     start_playlist();
+                    continue; // give it some time to start, do not run scheduler yet
                 }
             } catch (InterruptedException e) {
                 Logger.warning(this, "scheduler loop interrupted");
                 break;
             } catch (Exception e) {
                 Logger.exception(this, "error processing scheduler command", e);
-            } finally {
-                try {
-                    if (playlist != null) {
-                        scheduler();
-                    }
-                } catch (Exception e) {
-                    Logger.exception(this, "error running scheduler", e);
+            }
+            try {
+                if (playlist != null) {
+                    scheduler();
                 }
+            } catch (Exception e) {
+                Logger.exception(this, "error running scheduler", e);
             }
         }
         Logger.debug(this, "stopping scheduler loop");
