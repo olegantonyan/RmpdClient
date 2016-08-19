@@ -19,10 +19,6 @@
     <string name="pref_title_autostart">Autostart on boot</string>
     <string name="pref_key_autostart" translatable="false">autostart</string>
 
-    <string name="pref_description_verbose_logging">Verbose logging</string>
-    <string name="pref_title_verbose_logging">Verbose log file. Do not enable unless you are absolutely sure you need this</string>
-    <string name="pref_key_verbose_logging" translatable="false">verbose_logging</string>
-
 
     <!-- Settings for Network -->
     <string name="pref_header_network">Network</string>
@@ -38,5 +34,12 @@
     <string name="pref_default_password" translatable="false"></string>
     <string name="pref_title_password">Device password</string>
     <string name="pref_key_password" translatable="false">password</string>
+
+
+    <string name="pref_header_logging">Logging</string>
+
+    <string name="pref_description_verbose_logging">Verbose logging</string>
+    <string name="pref_title_verbose_logging">Verbose log file. Do not enable unless you are absolutely sure you need this</string>
+    <string name="pref_key_verbose_logging" translatable="false">verbose_logging</string>
 
 </resources>

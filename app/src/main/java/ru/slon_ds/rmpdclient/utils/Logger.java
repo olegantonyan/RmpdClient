@@ -112,14 +112,16 @@ class FileLogger {
         return path + "/" + filename;
     }
 
-    private void rotate() {
+    private boolean rotate() {
         final long threshold = 2 * 1024 * 1024;
         if (file.length() >= threshold) {
             try {
                 Files.copy_file(file.getAbsolutePath(), file.getAbsolutePath() + "." + thetime());
+                if (!file.delete()) {
+                    return false;
+                }
             } catch (IOException e) {
-            } finally {
-                file.delete();
+                return false;
             }
 
             File dir = new File(path);
@@ -135,5 +137,6 @@ class FileLogger {
                 }
             }
         }
+        return true;
     }
 }

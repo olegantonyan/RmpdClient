@@ -30,6 +30,7 @@ public class Config {
         }
         PreferenceManager.setDefaultValues(ctx, R.xml.pref_general, false);
         PreferenceManager.setDefaultValues(ctx, R.xml.pref_network, false);
+        PreferenceManager.setDefaultValues(ctx, R.xml.pref_logging, false);
     }
 
     public boolean first_run() {

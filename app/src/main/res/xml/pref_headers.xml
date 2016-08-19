@@ -3,13 +3,15 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
+        android:fragment="ru.slon_ds.rmpdclient.SettingsActivity$GeneralPreferenceFragment"
+        android:title="@string/pref_header_general" />
+
+    <header
         android:fragment="ru.slon_ds.rmpdclient.SettingsActivity$NetworkPreferenceFragment"
-        android:icon="@drawable/ic_sync_black_24dp"
         android:title="@string/pref_header_network" />
 
     <header
-        android:fragment="ru.slon_ds.rmpdclient.SettingsActivity$GeneralPreferenceFragment"
-        android:icon="@drawable/ic_info_black_24dp"
-        android:title="@string/pref_header_general" />
+        android:fragment="ru.slon_ds.rmpdclient.SettingsActivity$LoggingPreferenceFragment"
+        android:title="@string/pref_header_logging" />
 
 </preference-headers>
