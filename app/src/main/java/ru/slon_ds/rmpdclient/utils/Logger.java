@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import ru.slon_ds.rmpdclient.AndroidApplication;
 
@@ -49,7 +51,7 @@ public class Logger {
         Log.e(tag, message, exception);
     }
 
-    private static String tag(Object source) {
+    public static String tag(Object source) {
         String result;
         if (source instanceof String) {
             result = (String) source;
@@ -59,17 +61,20 @@ public class Logger {
         return result + thread_info();
     }
 
-    private static String thread_info() {
+    public static String thread_info() {
         Thread t = Thread.currentThread();
         return String.format(Locale.US, "[%s/%d]", t.getName(), t.getId());
     }
 }
 
-class FileLogger {
+class FileLogger implements Runnable {
     private static FileLogger _instance = null;
     private File file = null;
     private String path = null;
     private String filename = null;
+    private BlockingQueue<String> queue = null;
+    private Thread thread = null;
+    private int writes_count_since_last_rotation = 0;
 
     public static FileLogger instance() {
         if (_instance == null) {
@@ -81,6 +86,7 @@ class FileLogger {
     private FileLogger() {
         path = Files.logs_path();
         filename = "rmpd.log";
+        queue = new LinkedBlockingQueue<>();
         file = new File(full_filepath());
     }
 
@@ -89,14 +95,30 @@ class FileLogger {
         if (level.equals("DEBUG") && !Config.instance().verbose_logging()) {
             return true;
         }
-        try {
-            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
-            out.println(formatted_message(level, tag, message));
-            out.close();
-            rotate();
-            return true;
-        } catch (Exception e) {
-            return false;
+        boolean ok = queue.offer(formatted_message(level, tag, message));
+        if (thread == null || !thread.isAlive()) {
+            thread = new Thread(this);
+            thread.start();
+        }
+        return ok;
+    }
+
+    @Override
+    public void run() {
+        thread.setName("file_logger");
+        String message;
+        while ((message = queue.poll()) != null) {
+            try {
+                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
+                out.println(message);
+                out.close();
+                if (writes_count_since_last_rotation++ > 1000) {
+                    rotate();
+                    writes_count_since_last_rotation = 0;
+                }
+            } catch (Exception e) {
+                // can't do anything
+            }
         }
     }
 
