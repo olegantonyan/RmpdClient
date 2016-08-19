@@ -62,8 +62,8 @@ public class PlayerWrapper extends Handler implements MediaPlayer.OnErrorListene
     }
 
     @Override
-    public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
-        String message = String.format(Locale.US, "playback error (%d, %d)", i, i1);
+    public boolean onError(MediaPlayer mediaPlayer, int what, int extra) {
+        String message = error_explanation(what, extra);
         Logger.error(this, message);
         if (callback != null) {
             callback.onerror(message);
@@ -100,5 +100,39 @@ public class PlayerWrapper extends Handler implements MediaPlayer.OnErrorListene
                 Logger.exception(this, "error putting result into queue", e);
             }
         }
+    }
+
+    private String error_explanation(int what, int extra) {
+        String what_string;
+        switch (what) {
+            case MediaPlayer.MEDIA_ERROR_UNKNOWN:
+                what_string = "MEDIA_ERROR_UNKNOWN";
+                break;
+            case MediaPlayer.MEDIA_ERROR_SERVER_DIED:
+                what_string = "MEDIA_ERROR_SERVER_DIED";
+                break;
+            default:
+                what_string = String.valueOf(what);
+                break;
+
+        }
+        String extra_string;
+        switch (extra) {
+            case MediaPlayer.MEDIA_ERROR_IO:
+                extra_string = "MEDIA_ERROR_IO";
+                break;
+            case MediaPlayer.MEDIA_ERROR_MALFORMED:
+                extra_string = "MEDIA_ERROR_MALFORMED";
+                break;
+            case MediaPlayer.MEDIA_ERROR_UNSUPPORTED:
+                extra_string = "MEDIA_ERROR_UNSUPPORTED";
+                break;
+            case MediaPlayer.MEDIA_ERROR_TIMED_OUT:
+                extra_string = "MEDIA_ERROR_TIMED_OUT";
+                break;
+            default:
+                extra_string = String.valueOf(extra);
+        }
+        return String.format(Locale.US, "(%s, %s)", what_string, extra_string);
     }
 }

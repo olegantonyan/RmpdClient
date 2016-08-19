@@ -37,11 +37,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
 
         Config.instance().load_defaults();
 
-        /*ActionBar a = getSupportActionBar();
-        if (a != null) a.hide();
-        android.app.ActionBar b = getActionBar();
-        if (b != null) b.hide();*/
-
         if (Config.instance().first_run()) {
             launch_settings_activity();
         }
@@ -55,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     @Override
     protected void onStart() {
         super.onStart();
+
+        if (main != null && main.isAlive()) {
+            main.interrupt();
+        }
 
         Logger.debug(this, "starting main");
         main = new Main(new PlayerWrapper(video_view));

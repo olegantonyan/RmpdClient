@@ -120,6 +120,7 @@ class DownloadWorker extends Thread {
 
     @Override
     public void run() {
+        setName("download_worker");
         boolean ok = false;
         String message = "";
         try {

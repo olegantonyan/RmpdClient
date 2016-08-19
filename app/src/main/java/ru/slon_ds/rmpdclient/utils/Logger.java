@@ -60,7 +60,8 @@ public class Logger {
     }
 
     private static String thread_info() {
-        return String.format(Locale.US, "[%s]", Thread.currentThread().getName());
+        Thread t = Thread.currentThread();
+        return String.format(Locale.US, "[%s/%d]", t.getName(), t.getId());
     }
 }
 

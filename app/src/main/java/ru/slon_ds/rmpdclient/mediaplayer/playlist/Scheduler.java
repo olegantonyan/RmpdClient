@@ -113,7 +113,6 @@ public class Scheduler implements Runnable, PlayerWrapper.Callback {
         if (player.is_playing() || playlist == null) {
             play(null);
         }
-        now_playing.set(null);
         reset_preempted();
         if (playlist != null) {
             Item start_item = playlist.first_background();
@@ -143,20 +142,22 @@ public class Scheduler implements Runnable, PlayerWrapper.Callback {
         }
     }
 
+    private void stop() {
+        player.stop();
+        notify_playlist_on_track_finished(now_playing.get());
+        now_playing.set(null);
+    }
+
     private void play(Item item) {
         if (item == null) {
-            now_playing.set(null);
-            player.stop();
-            track_finished();
+            stop();
             return;
         }
         if (player.is_playing()) {
             if (item.is_advertising()) {
-                preempt(now_playing.get(), player.time_pos());
-                player.suspend();
+                suspend();
             } else {
-                track_finished();
-                player.stop();
+                stop();
             }
         }
         player.play(item);
@@ -169,8 +170,14 @@ public class Scheduler implements Runnable, PlayerWrapper.Callback {
         now_playing.set(item);
     }
 
+    private void suspend() {
+        preempt(now_playing.get(), player.time_pos());
+        player.suspend();
+    }
+
     @Override
     public void run() {
+        thread.setName("scheduler_loop");
         Logger.debug(this, "entering scheduler loop");
         while (!thread.isInterrupted()) {
             try {

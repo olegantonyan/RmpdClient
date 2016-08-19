@@ -34,11 +34,9 @@ public class Config {
     }
 
     public boolean first_run() {
-        final Context ctx = AndroidApplication.context();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
-        boolean result = preferences.getBoolean("firstrun", true);
+        boolean result = preferences().getBoolean("firstrun", true);
         if (result) {
-            SharedPreferences.Editor editor = preferences.edit();
+            SharedPreferences.Editor editor = preferences().edit();
             editor.putBoolean("firstrun", false);
             editor.apply();
         }

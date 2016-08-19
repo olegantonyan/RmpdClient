@@ -70,6 +70,7 @@ public class ControlWrapper implements Runnable {
 
     @Override
     public void run() {
+        thread.setName("control_wrapper_loop");
         Logger.debug(this, "entering check queue loop");
         MessageQueue mq = mq();
         while (!thread.isInterrupted()) {
