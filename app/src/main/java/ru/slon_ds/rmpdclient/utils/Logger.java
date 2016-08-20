@@ -86,7 +86,7 @@ class FileLogger implements Runnable {
     private FileLogger() {
         path = Files.logs_path();
         filename = "rmpd.log";
-        queue = new LinkedBlockingQueue<>();
+        queue = new LinkedBlockingQueue<>(1000);
         file = new File(full_filepath());
     }
 
