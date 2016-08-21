@@ -32,8 +32,10 @@ public class UpdatePlaylist extends BaseCommand implements DownloadWorker.OnDown
     @Override
     public void onfinished(boolean ok, Integer seq, String message) {
         Logger.info(this, "playlist update finished " + (ok ? "successfully" : "failure") + ":" + message + " (" + seq.toString() + ")");
-        save_playlist_file();
-        PlayerController.instance().start_playlist();
+        if (ok) {
+            save_playlist_file();
+            PlayerController.instance().start_playlist();
+        }
         ack(ok, seq, message);
     }
 
@@ -136,7 +138,7 @@ class DownloadWorker extends Thread {
                     continue;
                 }
                 Logger.info(this, "downloading file " + url.toString());
-                http.download_file(url, localpath);
+                http.download_file(url, localpath, 3);
             }
             utilize_not_playlist_files();
             ok = true;
