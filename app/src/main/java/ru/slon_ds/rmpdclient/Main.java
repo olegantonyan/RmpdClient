@@ -12,6 +12,7 @@ public class Main extends Thread {
     public Main(PlayerWrapper player_wrapper) {
         super();
         this.player_wrapper = player_wrapper;
+        setDaemon(true);
     }
 
     @Override

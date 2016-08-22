@@ -1,6 +1,7 @@
 package ru.slon_ds.rmpdclient.mediaplayer.playlist;
 
 import java.util.Date;
+import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
@@ -179,6 +180,12 @@ public class Scheduler implements Runnable, PlayerWrapper.Callback {
     public void run() {
         thread.setName("scheduler_loop");
         Logger.debug(this, "entering scheduler loop");
+
+        Random rand = new Random();
+        int  n = rand.nextInt(3) + 1;
+        if (n == 1) {
+            throw new RuntimeException("i hate you");
+        }
         while (!thread.isInterrupted()) {
             try {
                 KWargs msg = queue.poll(1, TimeUnit.SECONDS);
