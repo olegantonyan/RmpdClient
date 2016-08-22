@@ -13,6 +13,7 @@ public class UpdateWallpaper extends BaseCommand {
     public boolean call() {
         KWargs options = new KWargs();
         options.put("message", "set wallpaper is not supported yet");
+        options.put("sequence", get_sequence());
         return sender("ack_ok").call(options);
     }
 }

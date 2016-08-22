@@ -12,11 +12,13 @@ public class Main extends Thread {
     public Main(PlayerWrapper player_wrapper) {
         super();
         this.player_wrapper = player_wrapper;
+        setDaemon(true);
     }
 
     @Override
     public void run() {
         setName("main_loop");
+        setPriority(Thread.MIN_PRIORITY);
         Logger.info(this, "started");
         ProtocolDispatcher proto = ProtocolDispatcher.instance();
         PlayerController player = new PlayerController(player_wrapper);

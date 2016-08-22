@@ -78,7 +78,7 @@ public class HttpClient {
             while ((bufferLength = is.read(buffer)) > 0) {
                 if (Thread.currentThread().isInterrupted()) {
                     Logger.warning(this, "download interrupted");
-                    break;
+                    return;
                 }
                 os.write(buffer, 0, bufferLength);
             }
@@ -92,6 +92,23 @@ public class HttpClient {
                 tempfile.delete();
             }
         }
+    }
+
+    public void download_file(URL url, String localpath, int retries) throws IllegalArgumentException, IOException {
+        if (retries <= 0) {
+            throw new IllegalArgumentException("retries is <= 0");
+        }
+        IOException last_error = new IOException();
+        for (int i = 0; i < retries; i++) {
+            try {
+                download_file(url, localpath);
+                return;
+            } catch (IOException e) {
+                last_error = e;
+                Logger.exception(this, "retrying download", e);
+            }
+        }
+        throw last_error;
     }
 
     private static String input_stream_to_string(InputStream is) throws IOException {
