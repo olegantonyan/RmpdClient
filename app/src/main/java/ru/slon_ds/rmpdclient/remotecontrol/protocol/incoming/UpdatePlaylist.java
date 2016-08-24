@@ -34,7 +34,9 @@ public class UpdatePlaylist extends BaseCommand implements DownloadWorker.OnDown
         Logger.info(this, "playlist update finished " + (ok ? "successfully" : "failure") + ":" + message + " (" + seq.toString() + ")");
         if (ok) {
             save_playlist_file();
-            PlayerController.instance().start_playlist();
+            if (PlayerController.instance() != null) {
+                PlayerController.instance().start_playlist();
+            }
         }
         ack(ok, seq, message);
     }
@@ -101,7 +103,8 @@ class DownloadWorkerManager {
         worker.start();
     }
 
-    private DownloadWorkerManager() {}
+    private DownloadWorkerManager() {
+    }
 }
 
 class DownloadWorker extends Thread {

@@ -16,7 +16,9 @@ public class DeletePlaylist extends BaseCommand {
     @Override
     public boolean call() {
         boolean ok = delete_files();
-        PlayerController.instance().start_playlist();
+        if (PlayerController.instance() != null) {
+            PlayerController.instance().start_playlist();
+        }
         return ack(ok);
     }
 
