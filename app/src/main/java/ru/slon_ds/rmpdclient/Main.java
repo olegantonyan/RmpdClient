@@ -5,6 +5,7 @@ import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerWrapper;
 import ru.slon_ds.rmpdclient.remotecontrol.ProtocolDispatcher;
 import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
+import ru.slon_ds.rmpdclient.utils.ServiceUpload;
 
 public class Main extends Thread {
     private PlayerWrapper player_wrapper = null;
@@ -23,6 +24,10 @@ public class Main extends Thread {
         ProtocolDispatcher proto = ProtocolDispatcher.instance();
         PlayerController player = new PlayerController(player_wrapper);
         player.start_playlist();
+        if (DefaultUncaughtExceptionHandler.is_after_crash()) {
+            new Thread(new ServiceUpload("crash")).start();
+            DefaultUncaughtExceptionHandler.set_after_crash_state(false);
+        }
         while (!isInterrupted()) {
             KWargs kw = new KWargs();
             kw.put("percent_position", player.current_track_position());

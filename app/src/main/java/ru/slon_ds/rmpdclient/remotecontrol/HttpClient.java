@@ -6,7 +6,9 @@ import org.json.JSONException;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,26 +17,28 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
 
 import ru.slon_ds.rmpdclient.AndroidApplication;
 import ru.slon_ds.rmpdclient.utils.Files;
 import ru.slon_ds.rmpdclient.utils.JsonDict;
+import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class HttpClient {
-    private URL server_url;
+    private URL server_url_base;
     private String login;
     private String password;
 
     public HttpClient(String server_url, String login, String password) throws MalformedURLException {
-        this.server_url = new URL(new URL(server_url), "/deviceapi/status");
+        this.server_url_base = new URL(server_url);
         this.login = login;
         this.password = password;
     }
 
     public HttpData send(JsonDict msg, Integer seq) throws IOException, JSONException, HttpError {
         HttpData result = null;
-        HttpURLConnection connection = (HttpURLConnection) server_url.openConnection();
+        HttpURLConnection connection = (HttpURLConnection) status_url().openConnection();
         connection.setConnectTimeout(30_000);
         connection.setReadTimeout(60_000);
         connection.setRequestProperty("X-Sequence-Number", seq.toString());
@@ -109,6 +113,85 @@ public class HttpClient {
             }
         }
         throw last_error;
+    }
+
+    public void submit_multipart_form(URL url, KWargs data) throws IOException, HttpError {
+        DataOutputStream os = null;
+        final String boundary = "*****" + Long.toString(System.currentTimeMillis()) + "*****";
+        try {
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setUseCaches(false);
+            connection.setDoOutput(true);
+            connection.setRequestMethod("POST");
+            connection.setConnectTimeout(60_000);
+            connection.setReadTimeout(60_000);
+            if (login != null && password != null) {
+                connection.setRequestProperty("Authorization", basic_auth_header());
+            }
+            connection.setRequestProperty("User-Agent", AndroidApplication.user_agent());
+            connection.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+            os = new DataOutputStream(connection.getOutputStream());
+
+            for(KWargs.Entry<String, Object> i : data.entrySet()) {
+                String key = i.getKey();
+                Object value = i.getValue();
+                os.writeBytes("--" + boundary + "\r\n");
+                if (value instanceof File) {
+                    File file = (File) value;
+                    os.writeBytes("Content-Disposition: form-data; name=\"" + key + "\"; filename=\"" + file.getAbsolutePath() +"\"" + "\r\n");
+                    os.writeBytes("Content-Type: " + URLConnection.guessContentTypeFromName(file.getName()) + "\r\n");
+                    os.writeBytes("Content-Transfer-Encoding: binary\r\n");
+                    os.writeBytes("\r\n");
+                    FileInputStream fi = new FileInputStream(file);
+                    int bytes_available = fi.available();
+                    final int MAX_BUFFER_SIZE = 1_048_576;
+                    int buffer_size = Math.min(bytes_available, MAX_BUFFER_SIZE);
+                    byte buffer[] = new byte[buffer_size];
+
+                    int bytes_read = fi.read(buffer, 0, buffer_size);
+                    while (bytes_read > 0) {
+                        os.write(buffer, 0, buffer_size);
+                        bytes_available = fi.available();
+                        buffer_size = Math.min(bytes_available, MAX_BUFFER_SIZE);
+                        bytes_read = fi.read(buffer, 0, buffer_size);
+                    }
+                    os.writeBytes("\r\n");
+                    os.flush();
+                    fi.close();
+                } else if (value instanceof String) {
+                    os.writeBytes("Content-Disposition: form-data; name=\"" + key + "\"\r\n");
+                    os.writeBytes("Content-Type: text/plain\r\n");
+                    os.writeBytes("\r\n");
+                    os.writeBytes((String) value);
+                    os.writeBytes("\r\n");
+                }
+            }
+            os.writeBytes("--" + boundary + "--\r\n");
+            os.flush();
+            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                throw new HttpError("http request failed, status code: " + connection.getResponseCode());
+            }
+        } finally {
+            if (os != null) {
+                os.close();
+            }
+        }
+    }
+
+    public URL status_url() {
+        try {
+            return new URL(server_url_base, "/deviceapi/status");
+        } catch (MalformedURLException e) {
+            return null;
+        }
+    }
+
+    public URL service_upload_url() {
+        try {
+            return new URL(server_url_base, "/deviceapi/service_upload");
+        } catch (MalformedURLException e) {
+            return null;
+        }
     }
 
     private static String input_stream_to_string(InputStream is) throws IOException {
