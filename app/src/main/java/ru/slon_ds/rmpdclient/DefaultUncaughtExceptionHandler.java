@@ -5,6 +5,8 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import java.util.Locale;
 
@@ -21,7 +23,8 @@ public class DefaultUncaughtExceptionHandler implements Thread.UncaughtException
     public void uncaughtException(Thread thread, Throwable throwable) {
         String text = String.format(Locale.US, "oops! unhandled exception in thread %s/%d, restarting", thread.getName(), thread.getId());
         Logger.exception(this, text, throwable);
-        activity.runOnUiThread(this); // TODO: send crash report
+        set_after_crash_state(true);
+        activity.runOnUiThread(this);
     }
 
     @Override
@@ -34,5 +37,19 @@ public class DefaultUncaughtExceptionHandler implements Thread.UncaughtException
         activity.finish();
         android.os.Process.killProcess(android.os.Process.myPid());
         System.exit(2);
+    }
+
+    public static void set_after_crash_state(boolean crash) {
+        final Context ctx = AndroidApplication.context();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("after_crash", crash);
+        editor.commit();
+    }
+
+    public static boolean is_after_crash() {
+        final Context ctx = AndroidApplication.context();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+        return preferences.getBoolean("after_crash", false);
     }
 }

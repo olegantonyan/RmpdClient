@@ -1,5 +1,6 @@
 package ru.slon_ds.rmpdclient.remotecontrol;
 
+import ru.slon_ds.rmpdclient.remotecontrol.downloadworker.DownloadWorkerManager;
 import ru.slon_ds.rmpdclient.remotecontrol.protocol.Receiver;
 import ru.slon_ds.rmpdclient.remotecontrol.protocol.Sender;
 import ru.slon_ds.rmpdclient.utils.JsonDict;
@@ -50,6 +51,7 @@ public class ProtocolDispatcher implements ControlWrapper.OnMessageCallback {
 
     public void quit() {
         control_wrapper.quit();
+        DownloadWorkerManager.instance().stop();
         _instance = null;
     }
 }

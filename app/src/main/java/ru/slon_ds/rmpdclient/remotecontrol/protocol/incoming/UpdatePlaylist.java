@@ -1,6 +1,5 @@
 package ru.slon_ds.rmpdclient.remotecontrol.protocol.incoming;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -9,8 +8,8 @@ import java.util.ArrayList;
 import ru.slon_ds.rmpdclient.mediaplayer.PlayerController;
 import ru.slon_ds.rmpdclient.mediaplayer.playlist.Loader;
 import ru.slon_ds.rmpdclient.remotecontrol.ControlWrapper;
-import ru.slon_ds.rmpdclient.remotecontrol.HttpClient;
-import ru.slon_ds.rmpdclient.utils.Config;
+import ru.slon_ds.rmpdclient.remotecontrol.downloadworker.DownloadWorker;
+import ru.slon_ds.rmpdclient.remotecontrol.downloadworker.DownloadWorkerManager;
 import ru.slon_ds.rmpdclient.utils.Files;
 import ru.slon_ds.rmpdclient.utils.JsonDict;
 import ru.slon_ds.rmpdclient.utils.KWargs;
@@ -34,7 +33,9 @@ public class UpdatePlaylist extends BaseCommand implements DownloadWorker.OnDown
         Logger.info(this, "playlist update finished " + (ok ? "successfully" : "failure") + ":" + message + " (" + seq.toString() + ")");
         if (ok) {
             save_playlist_file();
-            PlayerController.instance().start_playlist();
+            if (PlayerController.instance() != null) {
+                PlayerController.instance().start_playlist();
+            }
         }
         ack(ok, seq, message);
     }
@@ -76,100 +77,5 @@ public class UpdatePlaylist extends BaseCommand implements DownloadWorker.OnDown
         } catch (IOException e) {
             Logger.exception(this, "error saving playlist file", e);
         }
-    }
-}
-
-class DownloadWorkerManager {
-    private static DownloadWorkerManager _instance = new DownloadWorkerManager();
-    private DownloadWorker worker = null;
-
-    public static DownloadWorkerManager instance() {
-        return _instance;
-    }
-
-    public synchronized void start(ArrayList<URL> urls, Integer seq, DownloadWorker.OnDownloadFinishedCallback callback) {
-        if (worker != null && worker.isAlive()) {
-            Logger.warning(this, "trying to start update worker while another one is active, terminating");
-            worker.interrupt();
-            try {
-                worker.join();
-            } catch (InterruptedException e) {
-                Logger.exception(this, "error waiting for thread finished", e);
-            }
-        }
-        worker = new DownloadWorker(urls, seq, callback);
-        worker.start();
-    }
-
-    private DownloadWorkerManager() {}
-}
-
-class DownloadWorker extends Thread {
-    private ArrayList<URL> urls = new ArrayList<>();
-    private Integer seq = 0;
-    private OnDownloadFinishedCallback callback = null;
-
-    interface OnDownloadFinishedCallback {
-        void onfinished(boolean ok, Integer seq, String message);
-    }
-
-    public DownloadWorker(ArrayList<URL> urls, Integer seq, OnDownloadFinishedCallback callback) {
-        super();
-        this.urls = urls;
-        this.seq = seq;
-        this.callback = callback;
-    }
-
-    @Override
-    public void run() {
-        setName("download_worker");
-        boolean ok = false;
-        String message = "";
-        try {
-            HttpClient http = http_client();
-            for (URL url : urls) {
-                if (isInterrupted()) {
-                    message = "terminated";
-                    Logger.warning(this, message);
-                    break;
-                }
-                String localpath = Files.full_file_localpath(url.toString());
-                if (new File(localpath).exists()) {
-                    continue;
-                }
-                Logger.info(this, "downloading file " + url.toString());
-                http.download_file(url, localpath, 3);
-            }
-            utilize_not_playlist_files();
-            ok = true;
-            message = "playlist updated successfully";
-        } catch (Exception e) {
-            message = "error downloading files";
-            ok = false;
-            Logger.exception(this, message, e);
-        } finally {
-            if (callback != null && !isInterrupted()) {
-                callback.onfinished(ok, seq, message);
-            }
-        }
-    }
-
-    private void utilize_not_playlist_files() {
-        ArrayList<String> filenames = new ArrayList<>();
-        for (URL u : urls) {
-            filenames.add(Files.file_basename(u.toString()));
-        }
-        File dir = new File(Files.mediafiles_path());
-        File files_in_dir[] = dir.listFiles();
-        for (File current : files_in_dir) {
-            if (!filenames.contains(current.getName()) && !(new Loader().filename().equals(current.getName()))) {
-                Logger.info(this, "removing file not in current playlist '" + current.getName() + "'");
-                current.delete();
-            }
-        }
-    }
-
-    private HttpClient http_client() throws MalformedURLException {
-        return new HttpClient(Config.instance().server_url(), Config.instance().login(), Config.instance().password());
     }
 }

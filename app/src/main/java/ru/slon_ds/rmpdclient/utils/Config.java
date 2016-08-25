@@ -48,8 +48,6 @@ public class Config {
     }
 
     public String server_url() {
-        //return "http://192.168.1.3:3000";
-        //return "http://10.0.2.2:3000";
         return preferences().getString(getResources().getString(R.string.pref_key_server_uri), getResources().getString(R.string.pref_default_server_uri));
     }
 
@@ -62,7 +60,11 @@ public class Config {
     }
 
     public String storage_path() {
-        return preferences().getString(getResources().getString(R.string.pref_key_storage_path), Files.base_storage_path());
+        String result = preferences().getString(getResources().getString(R.string.pref_key_storage_path), null);
+        if (result == null) {
+            result = Files.base_storage_path();
+        }
+        return result;
     }
 
     public boolean verbose_logging() {
