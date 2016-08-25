@@ -8,7 +8,6 @@ import java.util.TimeZone;
 import ru.slon_ds.rmpdclient.AndroidApplication;
 import ru.slon_ds.rmpdclient.remotecontrol.ControlWrapper;
 import ru.slon_ds.rmpdclient.utils.JsonDict;
-import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class UpdateSetting extends BaseCommand {
@@ -39,13 +38,6 @@ public class UpdateSetting extends BaseCommand {
             }
         }
         return ack(ok, msg);
-    }
-
-    private boolean ack(boolean ok, String msg) {
-        KWargs options = new KWargs();
-        options.put("sequence", get_sequence());
-        options.put("message", msg);
-        return sender("ack_" + (ok ? "ok" : "fail")).call(options);
     }
 
     private void change_timezone(String tz) {

@@ -1,7 +1,6 @@
 package ru.slon_ds.rmpdclient.utils;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -30,7 +29,7 @@ public class ServiceUpload implements Runnable {
         try {
             ZipArchive archive = new ZipArchive();
             archive.compress_directory(Files.logs_path(), archive_path);
-            HttpClient http = http_client();
+            HttpClient http = HttpClient.new_default();
             KWargs params = new KWargs();
             params.put("file", new File(archive_path));
             params.put("reason", reason);
@@ -39,10 +38,6 @@ public class ServiceUpload implements Runnable {
         } finally {
             new File(archive_path).delete();
         }
-    }
-
-    private HttpClient http_client() throws MalformedURLException {
-        return new HttpClient(Config.instance().server_url(), Config.instance().login(), Config.instance().password());
     }
 
     private String temp_archive_filepath() {

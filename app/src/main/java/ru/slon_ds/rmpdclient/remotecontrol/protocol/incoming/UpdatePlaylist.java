@@ -37,14 +37,7 @@ public class UpdatePlaylist extends BaseCommand implements DownloadWorker.OnDown
                 PlayerController.instance().start_playlist();
             }
         }
-        ack(ok, seq, message);
-    }
-
-    private boolean ack(boolean ok, Integer seq, String msg) {
-        KWargs options = new KWargs();
-        options.put("sequence", seq);
-        options.put("message", msg);
-        return sender("ack_" + (ok ? "ok" : "fail")).call(options);
+        ack(ok, message);
     }
 
     private void send_begin_command(ArrayList<URL> urls) {

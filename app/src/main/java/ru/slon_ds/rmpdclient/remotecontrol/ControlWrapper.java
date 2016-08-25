@@ -3,7 +3,6 @@ package ru.slon_ds.rmpdclient.remotecontrol;
 import java.net.MalformedURLException;
 import java.util.Locale;
 
-import ru.slon_ds.rmpdclient.utils.Config;
 import ru.slon_ds.rmpdclient.utils.JsonDict;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
@@ -102,7 +101,7 @@ public class ControlWrapper implements Runnable {
 
     private HttpClient http_client() {
         try {
-            return new HttpClient(Config.instance().server_url(), Config.instance().login(), Config.instance().password());
+            return HttpClient.new_default();
         } catch (MalformedURLException e) {
             Logger.exception(this, "error creating http client", e);
             return null;

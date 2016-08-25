@@ -20,6 +20,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import ru.slon_ds.rmpdclient.AndroidApplication;
+import ru.slon_ds.rmpdclient.utils.Config;
 import ru.slon_ds.rmpdclient.utils.Files;
 import ru.slon_ds.rmpdclient.utils.JsonDict;
 import ru.slon_ds.rmpdclient.utils.KWargs;
@@ -34,6 +35,10 @@ public class HttpClient {
         this.server_url_base = new URL(server_url);
         this.login = login;
         this.password = password;
+    }
+
+    public static HttpClient new_default() throws MalformedURLException {
+        return new HttpClient(Config.instance().server_url(), Config.instance().login(), Config.instance().password());
     }
 
     public HttpData send(JsonDict msg, Integer seq) throws IOException, JSONException, HttpError {

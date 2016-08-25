@@ -1,13 +1,11 @@
 package ru.slon_ds.rmpdclient.remotecontrol.playlist;
 
 import java.io.File;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
 import ru.slon_ds.rmpdclient.mediaplayer.playlist.Loader;
 import ru.slon_ds.rmpdclient.remotecontrol.HttpClient;
-import ru.slon_ds.rmpdclient.utils.Config;
 import ru.slon_ds.rmpdclient.utils.Files;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
@@ -33,7 +31,7 @@ public class DownloadWorker extends Thread {
         boolean ok = false;
         String message = "";
         try {
-            HttpClient http = http_client();
+            HttpClient http = HttpClient.new_default();
             for (URL url : urls) {
                 if (isInterrupted()) {
                     break;
@@ -77,9 +75,5 @@ public class DownloadWorker extends Thread {
                 current.delete();
             }
         }
-    }
-
-    private HttpClient http_client() throws MalformedURLException {
-        return new HttpClient(Config.instance().server_url(), Config.instance().login(), Config.instance().password());
     }
 }

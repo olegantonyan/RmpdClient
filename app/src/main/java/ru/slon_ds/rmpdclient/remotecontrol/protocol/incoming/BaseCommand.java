@@ -3,6 +3,7 @@ package ru.slon_ds.rmpdclient.remotecontrol.protocol.incoming;
 import ru.slon_ds.rmpdclient.remotecontrol.ControlWrapper;
 import ru.slon_ds.rmpdclient.remotecontrol.protocol.Sender;
 import ru.slon_ds.rmpdclient.utils.JsonDict;
+import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
 public abstract class BaseCommand {
@@ -17,6 +18,13 @@ public abstract class BaseCommand {
     }
 
     public abstract boolean call();
+
+    protected boolean ack(boolean ok, String msg) {
+        KWargs options = new KWargs();
+        options.put("sequence", get_sequence());
+        options.put("message", msg);
+        return sender("ack_" + (ok ? "ok" : "fail")).call(options);
+    }
 
     protected ControlWrapper get_control_wrapper() {
         return control_wrapper;

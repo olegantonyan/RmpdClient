@@ -67,6 +67,12 @@ public class Files {
     }
 
     public static void copy_file(String src, String dst) throws IOException {
+        File dstf = new File(dst);
+        if (dstf.exists()) {
+            if (!dstf.delete()) {
+                throw new IOException("cannot delete file " + dst);
+            }
+        }
         InputStream in = new FileInputStream(src);
         OutputStream out = new FileOutputStream(dst);
         try {
