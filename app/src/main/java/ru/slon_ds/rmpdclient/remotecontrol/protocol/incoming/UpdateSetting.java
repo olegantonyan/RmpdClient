@@ -23,7 +23,8 @@ public class UpdateSetting extends BaseCommand {
         String tz = get_data().fetch("time_zone", String.class);
         if (tz != null) {
             try {
-                String suitable_tz = suitable_timezone(tz);
+                String tz_name = get_data().fetch("time_zone_name", String.class, null);
+                String suitable_tz = suitable_timezone(tz, tz_name);
                 if (suitable_tz == null) {
                     msg = "error setting timezone to " + tz + " (no suitable timezones found at this offset)";
                     ok = false;
@@ -53,8 +54,18 @@ public class UpdateSetting extends BaseCommand {
         am.setTimeZone(tz);
     }
 
-    private String suitable_timezone(String tz) {
-        String suitable_timezones[] = TimeZone.getAvailableIDs(timezone_milliseconds_offset(tz));
+    private String suitable_timezone(String offset, String tz_name) {
+        if (tz_name != null) {
+            tz_name = tz_name.toLowerCase();
+            String all_timezones[] = TimeZone.getAvailableIDs();
+            for (String t : all_timezones) {
+                final String t_lower = t.toLowerCase();
+                if (tz_name.contains(t_lower) || t_lower.contains(tz_name)) {
+                    return t;
+                }
+            }
+        }
+        String suitable_timezones[] = TimeZone.getAvailableIDs(timezone_milliseconds_offset(offset));
         if (suitable_timezones.length == 0) {
             return null;
         }
