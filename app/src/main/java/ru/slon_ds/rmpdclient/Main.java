@@ -23,6 +23,7 @@ public class Main extends Thread {
         Logger.info(this, "started");
         ProtocolDispatcher proto = ProtocolDispatcher.instance();
         PlayerController player = new PlayerController(player_wrapper);
+        player.load_wallpaper();
         player.start_playlist();
         if (DefaultUncaughtExceptionHandler.is_after_crash()) {
             new Thread(new ServiceUpload("crash")).start();

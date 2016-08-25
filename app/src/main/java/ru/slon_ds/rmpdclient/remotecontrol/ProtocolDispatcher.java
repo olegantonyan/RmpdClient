@@ -1,6 +1,6 @@
 package ru.slon_ds.rmpdclient.remotecontrol;
 
-import ru.slon_ds.rmpdclient.remotecontrol.downloadworker.DownloadWorkerManager;
+import ru.slon_ds.rmpdclient.remotecontrol.playlist.DownloadWorkerManager;
 import ru.slon_ds.rmpdclient.remotecontrol.protocol.Receiver;
 import ru.slon_ds.rmpdclient.remotecontrol.protocol.Sender;
 import ru.slon_ds.rmpdclient.utils.JsonDict;

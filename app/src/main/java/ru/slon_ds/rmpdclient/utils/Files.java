@@ -44,6 +44,10 @@ public class Files {
         return result;
     }
 
+    public static String wallpaper_filepath() {
+        return Config.instance().storage_path() + "/wallpaper";
+    }
+
 
 
     public static URL full_url_by_relative(String relative) throws MalformedURLException {

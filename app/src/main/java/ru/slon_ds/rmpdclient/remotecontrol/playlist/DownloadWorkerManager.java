@@ -1,4 +1,4 @@
-package ru.slon_ds.rmpdclient.remotecontrol.downloadworker;
+package ru.slon_ds.rmpdclient.remotecontrol.playlist;
 
 import java.net.URL;
 import java.util.ArrayList;

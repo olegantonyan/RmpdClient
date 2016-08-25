@@ -1,15 +1,22 @@
 package ru.slon_ds.rmpdclient.mediaplayer;
 
+import android.graphics.drawable.Drawable;
+
+import java.io.File;
+
+import ru.slon_ds.rmpdclient.R;
 import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerWrapper;
 import ru.slon_ds.rmpdclient.mediaplayer.playlist.Loader;
 import ru.slon_ds.rmpdclient.mediaplayer.playlist.Playlist;
 import ru.slon_ds.rmpdclient.mediaplayer.playlist.Scheduler;
 import ru.slon_ds.rmpdclient.remotecontrol.ProtocolDispatcher;
+import ru.slon_ds.rmpdclient.utils.Files;
 import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class PlayerController {
     private Scheduler scheduler = null;
+    private PlayerWrapper player = null;
     private static PlayerController _instance = null;
 
     public static PlayerController instance() {
@@ -17,7 +24,8 @@ public class PlayerController {
     }
 
     public PlayerController(PlayerWrapper player_wrapper) {
-        scheduler = new Scheduler(player_wrapper);
+        player = player_wrapper;
+        scheduler = new Scheduler(player);
         _instance = this;
     }
 
@@ -46,5 +54,23 @@ public class PlayerController {
     public void quit() {
         scheduler.quit();
         _instance = null;
+    }
+
+    public boolean load_wallpaper() {
+        final String path = Files.wallpaper_filepath();
+        try {
+            KWargs options = new KWargs();
+            if (new File(path).exists()) {
+                options.put("drawable", Drawable.createFromPath(path));
+            } else {
+                options.put("resource_id", R.drawable.slon_ds_image);
+            }
+            player.execute("set_background_image", options);
+            return true;
+        } catch (Exception e) {
+            Logger.exception(this, "error setting wallpaper", e);
+            return false;
+        }
+
     }
 }
