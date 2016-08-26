@@ -8,6 +8,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.VideoView;
 
 import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerWrapper;
@@ -17,6 +18,7 @@ import ru.slon_ds.rmpdclient.utils.Logger;
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
     private Main main = null;
     private VideoView video_view = null;
+    private ImageView image_view = null;
     private GestureDetectorCompat gesture_detector = null;
 
     @Override
@@ -34,6 +36,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         video_view.setZOrderOnTop(true);
         video_view.requestFocus();
         video_view.setOnTouchListener(this);
+
+        image_view = (ImageView) findViewById(R.id.image_view);
+        image_view.requestFocus();
+        image_view.setOnTouchListener(this);
 
         Config.instance().load_defaults();
 
@@ -57,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         }
 
         Logger.debug(this, "starting main");
-        main = new Main(new PlayerWrapper(video_view));
+        main = new Main(new PlayerWrapper(video_view, image_view));
         main.start();
     }
 

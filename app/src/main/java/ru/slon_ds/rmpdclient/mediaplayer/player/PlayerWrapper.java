@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.widget.ImageView;
 import android.widget.VideoView;
 
 import java.util.Locale;
@@ -16,8 +17,10 @@ import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
 import ru.slon_ds.rmpdclient.utils.Support;
 
-public class PlayerWrapper extends Handler implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener {
+public class PlayerWrapper extends Handler implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener,
+        MediaPlayer.OnPreparedListener, ImagePlayer.Callback {
     private VideoView video_view = null;
+    public ImagePlayer image_player = null;
     private Callback callback = null;
     private BlockingQueue<KWargs> queue = null;
 
@@ -26,12 +29,14 @@ public class PlayerWrapper extends Handler implements MediaPlayer.OnErrorListene
         void onerror(String message);
     }
 
-    public PlayerWrapper(VideoView vv) {
+    public PlayerWrapper(VideoView vv, ImageView iv) {
         super(Looper.getMainLooper());
         video_view = vv;
         video_view.setOnErrorListener(this);
         video_view.setOnCompletionListener(this);
         video_view.setOnPreparedListener(this);
+        image_player = new ImagePlayer(iv);
+        image_player.set_callback(this);
         queue = new LinkedBlockingQueue<>();
     }
 
@@ -74,6 +79,22 @@ public class PlayerWrapper extends Handler implements MediaPlayer.OnErrorListene
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
         Logger.debug(this, "media player is ready to go");
+    }
+
+    @Override
+    public void on_image_player_finished() {
+        Logger.debug(this, "finished track (image)");
+        if (callback != null) {
+            callback.onfinished();
+        }
+    }
+
+    @Override
+    public void on_image_player_error(String error_message) {
+        Logger.error(this, error_message);
+        if (callback != null) {
+            callback.onerror(error_message);
+        }
     }
 
     @Override
