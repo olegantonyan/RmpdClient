@@ -11,17 +11,15 @@ import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class DownloadWorker extends Thread {
     private ArrayList<URL> urls = new ArrayList<>();
-    private Integer seq = 0;
     private OnDownloadFinishedCallback callback = null;
 
     public interface OnDownloadFinishedCallback {
-        void onfinished(boolean ok, Integer seq, String message);
+        void onfinished(boolean ok, String message);
     }
 
-    public DownloadWorker(ArrayList<URL> urls, Integer seq, OnDownloadFinishedCallback callback) {
+    public DownloadWorker(ArrayList<URL> urls, OnDownloadFinishedCallback callback) {
         super();
         this.urls = urls;
-        this.seq = seq;
         this.callback = callback;
     }
 
@@ -57,7 +55,7 @@ public class DownloadWorker extends Thread {
             Logger.exception(this, message, e);
         } finally {
             if (callback != null && !isInterrupted()) {
-                callback.onfinished(ok, seq, message);
+                callback.onfinished(ok, message);
             }
         }
     }

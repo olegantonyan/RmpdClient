@@ -24,13 +24,13 @@ public class UpdatePlaylist extends BaseCommand implements DownloadWorker.OnDown
     public boolean call() {
         ArrayList<URL> urls = items_urls();
         send_begin_command(urls);
-        DownloadWorkerManager.instance().start(urls, get_sequence(), this);
+        DownloadWorkerManager.instance().start(urls, this);
         return true;
     }
 
     @Override
-    public void onfinished(boolean ok, Integer seq, String message) {
-        Logger.info(this, "playlist update finished " + (ok ? "successfully" : "failure") + ":" + message + " (" + seq.toString() + ")");
+    public void onfinished(boolean ok, String message) {
+        Logger.info(this, message);
         if (ok) {
             save_playlist_file();
             if (PlayerController.instance() != null) {

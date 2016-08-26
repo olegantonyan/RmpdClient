@@ -13,7 +13,7 @@ public class DownloadWorkerManager {
         return _instance;
     }
 
-    public synchronized void start(ArrayList<URL> urls, Integer seq, DownloadWorker.OnDownloadFinishedCallback callback) {
+    public synchronized void start(ArrayList<URL> urls, DownloadWorker.OnDownloadFinishedCallback callback) {
         if (worker != null && worker.isAlive()) {
             Logger.warning(this, "trying to start update worker while another one is active, terminating");
             stop();
@@ -23,7 +23,7 @@ public class DownloadWorkerManager {
                 Logger.exception(this, "error waiting for thread finished", e);
             }
         }
-        worker = new DownloadWorker(urls, seq, callback);
+        worker = new DownloadWorker(urls, callback);
         worker.start();
     }
 
