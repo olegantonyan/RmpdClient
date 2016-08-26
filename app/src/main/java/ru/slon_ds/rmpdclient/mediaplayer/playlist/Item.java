@@ -32,7 +32,7 @@ public class Item {
     }
 
     public Integer position() {
-        return d.fetch("position", Integer.class);
+        return d.fetch("position", Integer.class, 0);
     }
 
     public TimeOnly begin_time() {
