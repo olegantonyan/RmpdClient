@@ -14,6 +14,7 @@ public class ImagePlayer extends TimerTask implements Handler.Callback {
     private Timer timer = null;
     private int seek_position = 0;
     private int stop_at_position = 0;
+    private boolean is_started = false;
     private Handler handler = null;
     private Callback callback = null;
 
@@ -41,15 +42,21 @@ public class ImagePlayer extends TimerTask implements Handler.Callback {
     public void stop() {
         timer.cancel();
         image_view.setImageResource(0);
+        is_started = false;
     }
 
-    public synchronized Integer time_pos() {
+    public synchronized Integer position_ms() {
         return seek_position * 1000;
+    }
+
+    public boolean is_playing() {
+        return is_started;
     }
 
     private synchronized void start_seek_timer() {
         seek_position = 0;
         timer.scheduleAtFixedRate(this, 1000, 1000);
+        is_started = true;
     }
 
     @Override

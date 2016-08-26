@@ -2,11 +2,12 @@ package ru.slon_ds.rmpdclient.mediaplayer.player.commands;
 
 import android.widget.VideoView;
 
+import ru.slon_ds.rmpdclient.mediaplayer.player.ImagePlayer;
 import ru.slon_ds.rmpdclient.utils.KWargs;
 
 public class PercentPos extends BaseCommand {
-    public PercentPos(VideoView vv, KWargs options) {
-        super(vv, options);
+    public PercentPos(VideoView vv, ImagePlayer ip, KWargs options) {
+        super(vv, ip, options);
     }
 
     @Override

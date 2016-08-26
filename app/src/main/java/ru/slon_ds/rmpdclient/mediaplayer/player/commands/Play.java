@@ -4,13 +4,14 @@ import android.widget.VideoView;
 
 import java.io.File;
 
+import ru.slon_ds.rmpdclient.mediaplayer.player.ImagePlayer;
 import ru.slon_ds.rmpdclient.mediaplayer.playlist.Item;
 import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class Play extends BaseCommand {
-    public Play(VideoView vv, KWargs options) {
-        super(vv, options);
+    public Play(VideoView vv, ImagePlayer ip, KWargs options) {
+        super(vv, ip, options);
     }
 
     @Override

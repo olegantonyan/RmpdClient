@@ -20,7 +20,7 @@ import ru.slon_ds.rmpdclient.utils.Support;
 public class PlayerWrapper extends Handler implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener,
         MediaPlayer.OnPreparedListener, ImagePlayer.Callback {
     private VideoView video_view = null;
-    public ImagePlayer image_player = null;
+    private ImagePlayer image_player = null;
     private Callback callback = null;
     private BlockingQueue<KWargs> queue = null;
 
@@ -106,8 +106,8 @@ public class PlayerWrapper extends Handler implements MediaPlayer.OnErrorListene
         String command_class_name = getClass().getPackage().getName() + ".commands." + Support.underscore_to_camelcase(command);
         KWargs result = new KWargs();
         try {
-            BaseCommand command_object = (BaseCommand) Class.forName(command_class_name).getConstructor(VideoView.class, KWargs.class)
-                    .newInstance(video_view, options);
+            BaseCommand command_object = (BaseCommand) Class.forName(command_class_name).getConstructor(VideoView.class, ImagePlayer.class, KWargs.class)
+                    .newInstance(video_view, image_player, options);
             result = command_object.call();
         } catch (Exception e) {
             // gotta catch em all!

@@ -3,12 +3,13 @@ package ru.slon_ds.rmpdclient.mediaplayer.player.commands;
 import android.graphics.drawable.Drawable;
 import android.widget.VideoView;
 
+import ru.slon_ds.rmpdclient.mediaplayer.player.ImagePlayer;
 import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class SetBackgroundImage extends BaseCommand {
-    public SetBackgroundImage(VideoView vv, KWargs options) {
-        super(vv, options);
+    public SetBackgroundImage(VideoView vv, ImagePlayer ip, KWargs options) {
+        super(vv, ip, options);
     }
 
     @Override
