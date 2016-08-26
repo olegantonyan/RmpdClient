@@ -13,7 +13,7 @@ public class ImagePlayer extends TimerTask implements Handler.Callback {
     private ImageView image_view = null;
     private Timer timer = null;
     private int seek_position = 0;
-    private int stop_at_position = 0;
+    private int duration = 0;
     private boolean is_started = false;
     private Handler handler = null;
     private Callback callback = null;
@@ -34,8 +34,11 @@ public class ImagePlayer extends TimerTask implements Handler.Callback {
     }
 
     public void start(String image_filepath, Integer duration_ms) {
+        if (is_playing()) {
+            stop();
+        }
         image_view.setImageDrawable(Drawable.createFromPath(image_filepath));
-        stop_at_position = duration_ms / 1000;
+        duration = duration_ms / 1000;
         start_seek_timer();
     }
 
@@ -45,12 +48,22 @@ public class ImagePlayer extends TimerTask implements Handler.Callback {
         is_started = false;
     }
 
-    public synchronized Integer position_ms() {
-        return seek_position * 1000;
+    public synchronized Integer position_sec() {
+        return seek_position;
     }
 
     public boolean is_playing() {
         return is_started;
+    }
+
+    public synchronized void seek_to(Integer ms) {
+        if (ms >= 0) {
+            seek_position = ms;
+        }
+    }
+
+    public Integer duration_sec() {
+        return duration;
     }
 
     private synchronized void start_seek_timer() {
@@ -66,7 +79,7 @@ public class ImagePlayer extends TimerTask implements Handler.Callback {
             ++seek_position;
             current_seek_position = seek_position;
         }
-        if (current_seek_position >= stop_at_position) {
+        if (current_seek_position >= duration) {
             execute("stop");
             if (callback != null) {
                 callback.on_image_player_finished();
