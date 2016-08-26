@@ -33,12 +33,12 @@ public class ImagePlayer extends TimerTask implements Handler.Callback {
         this.callback = cb;
     }
 
-    public void start(String image_filepath, Integer duration_ms) {
+    public void start(String image_filepath, Integer duration_sec) {
         if (is_playing()) {
             stop();
         }
         image_view.setImageDrawable(Drawable.createFromPath(image_filepath));
-        duration = duration_ms / 1000;
+        duration = duration_sec;
         start_seek_timer();
     }
 
