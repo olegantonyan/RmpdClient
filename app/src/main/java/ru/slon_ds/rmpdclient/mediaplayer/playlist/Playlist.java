@@ -2,6 +2,7 @@ package ru.slon_ds.rmpdclient.mediaplayer.playlist;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 import ru.slon_ds.rmpdclient.utils.JsonDict;
@@ -25,6 +26,13 @@ public class Playlist {
             }
             if (data.fetch("shuffle", Boolean.class, false)) {
                 Collections.shuffle(background);
+            } else {
+                Collections.sort(background, new Comparator<Item>() {
+                    @Override
+                    public int compare(Item i1, Item i2) {
+                        return i1.position().compareTo(i2.position());
+                    }
+                });
             }
         } catch (Exception e) {
             Logger.exception(this, "error loading playlist", e);
