@@ -25,10 +25,7 @@ public class Main extends Thread {
         PlayerController player = new PlayerController(player_wrapper);
         player.load_wallpaper();
         player.start_playlist();
-        if (DefaultUncaughtExceptionHandler.is_after_crash()) {
-            new Thread(new ServiceUpload("crash")).start();
-            DefaultUncaughtExceptionHandler.set_after_crash_state(false);
-        }
+        check_previous_crash();
         while (!isInterrupted()) {
             KWargs kw = new KWargs();
             kw.put("percent_position", player.current_track_position());
@@ -47,4 +44,10 @@ public class Main extends Thread {
         proto.quit();
     }
 
+    private void check_previous_crash() {
+        if (DefaultUncaughtExceptionHandler.is_after_crash()) {
+            new Thread(new ServiceUpload("crash")).start();
+            DefaultUncaughtExceptionHandler.set_after_crash_state(false);
+        }
+    }
 }
