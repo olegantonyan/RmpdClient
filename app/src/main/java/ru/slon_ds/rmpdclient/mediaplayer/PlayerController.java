@@ -5,7 +5,7 @@ import android.graphics.drawable.Drawable;
 import java.io.File;
 
 import ru.slon_ds.rmpdclient.R;
-import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerWrapper;
+import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerGuard;
 import ru.slon_ds.rmpdclient.mediaplayer.playlist.Loader;
 import ru.slon_ds.rmpdclient.mediaplayer.playlist.Playlist;
 import ru.slon_ds.rmpdclient.mediaplayer.playlist.Scheduler;
@@ -16,14 +16,14 @@ import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class PlayerController {
     private Scheduler scheduler = null;
-    private PlayerWrapper player = null;
+    private PlayerGuard player = null;
     private static PlayerController _instance = null;
 
     public static PlayerController instance() {
         return _instance;
     }
 
-    public PlayerController(PlayerWrapper player_wrapper) {
+    public PlayerController(PlayerGuard player_wrapper) {
         player = player_wrapper;
         scheduler = new Scheduler(player);
         _instance = this;

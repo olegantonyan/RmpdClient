@@ -11,7 +11,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.VideoView;
 
-import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerWrapper;
+import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerGuard;
 import ru.slon_ds.rmpdclient.utils.Config;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         }
 
         Logger.debug(this, "starting main");
-        main = new Main(new PlayerWrapper(video_view, image_view));
+        main = new Main(new PlayerGuard(video_view, image_view));
         main.start();
     }
 

@@ -1,18 +1,18 @@
 package ru.slon_ds.rmpdclient;
 
 import ru.slon_ds.rmpdclient.mediaplayer.PlayerController;
-import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerWrapper;
+import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerGuard;
 import ru.slon_ds.rmpdclient.remotecontrol.ProtocolDispatcher;
 import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
 import ru.slon_ds.rmpdclient.utils.ServiceUpload;
 
 public class Main extends Thread {
-    private PlayerWrapper player_wrapper = null;
+    private PlayerGuard player_guard = null;
 
-    public Main(PlayerWrapper player_wrapper) {
+    public Main(PlayerGuard player_guard) {
         super();
-        this.player_wrapper = player_wrapper;
+        this.player_guard = player_guard;
         setDaemon(true);
     }
 
@@ -22,7 +22,7 @@ public class Main extends Thread {
         setPriority(Thread.MIN_PRIORITY);
         Logger.info(this, "started");
         ProtocolDispatcher proto = ProtocolDispatcher.instance();
-        PlayerController player = new PlayerController(player_wrapper);
+        PlayerController player = new PlayerController(player_guard);
         player.load_wallpaper();
         player.start_playlist();
         check_previous_crash();

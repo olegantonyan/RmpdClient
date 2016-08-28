@@ -17,7 +17,7 @@ import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
 import ru.slon_ds.rmpdclient.utils.Support;
 
-public class PlayerWrapper extends Handler implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener,
+public class PlayerGuard extends Handler implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener,
         MediaPlayer.OnPreparedListener, ImagePlayer.Callback {
     private VideoView video_view = null;
     private ImagePlayer image_player = null;
@@ -29,7 +29,7 @@ public class PlayerWrapper extends Handler implements MediaPlayer.OnErrorListene
         void onerror(String message);
     }
 
-    public PlayerWrapper(VideoView vv, ImageView iv) {
+    public PlayerGuard(VideoView vv, ImageView iv) {
         super(Looper.getMainLooper());
         video_view = vv;
         video_view.setOnErrorListener(this);

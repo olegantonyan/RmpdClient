@@ -1,15 +1,15 @@
 package ru.slon_ds.rmpdclient.mediaplayer.playlist;
 
-import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerWrapper;
+import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerGuard;
 import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class PlayerProxy {
-    private PlayerWrapper player = null;
+    private PlayerGuard player = null;
     private PlaybackEvents events = null;
     private NowPlaying now_playing = null;
 
-    public PlayerProxy(PlayerWrapper w, PlaybackEvents e, NowPlaying np) {
+    public PlayerProxy(PlayerGuard w, PlaybackEvents e, NowPlaying np) {
         player = w;
         events = e;
         now_playing = np;

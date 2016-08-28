@@ -5,12 +5,12 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerWrapper;
+import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerGuard;
 import ru.slon_ds.rmpdclient.remotecontrol.ProtocolDispatcher;
 import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
-public class Scheduler implements Runnable, PlayerWrapper.Callback {
+public class Scheduler implements Runnable, PlayerGuard.Callback {
     private PlayerProxy player = null;
     private BlockingQueue<KWargs> queue = null;
     private Playlist playlist = null;
@@ -19,12 +19,12 @@ public class Scheduler implements Runnable, PlayerWrapper.Callback {
     private PlaybackEvents events = null;
     private Thread thread = null;
 
-    public Scheduler(PlayerWrapper player_wrapper) {
+    public Scheduler(PlayerGuard player_guard) {
         queue = new LinkedBlockingQueue<>();
-        player_wrapper.set_callback(this);
+        player_guard.set_callback(this);
         events = new PlaybackEvents(ProtocolDispatcher.instance());
         now_playing = new NowPlaying();
-        player = new PlayerProxy(player_wrapper, events, now_playing);
+        player = new PlayerProxy(player_guard, events, now_playing);
         thread = new Thread(this);
         thread.start();
     }
