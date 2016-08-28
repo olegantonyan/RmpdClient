@@ -102,6 +102,18 @@ public class Item {
         return false;
     }
 
+    public String content_type() {
+        return d.fetch("content_type", String.class);
+    }
+
+    public boolean is_image() {
+        return content_type() != null && content_type().startsWith("image/");
+    }
+
+    public Integer show_duration() {
+        return d.fetch("show_duration", Integer.class);
+    }
+
     public ArrayList<ScheduleInterval> schedule_intervals() {
         ArrayList<ScheduleInterval> result = new ArrayList<>();
         for (JsonDict i : d.fetch_array_of_objects("schedule_intervals")) {
