@@ -42,8 +42,9 @@ public class Scheduler implements Runnable, PlayerGuard.Callback {
 
     @Override
     public void onerror(String message) {
-        events.onerror(now_playing.get(), message);
-        onfinished();
+        KWargs options = new KWargs();
+        options.put("message", message);
+        schedule("track_error", options);
     }
 
     public String current_track_filename() {
@@ -66,8 +67,13 @@ public class Scheduler implements Runnable, PlayerGuard.Callback {
     }
 
     private void schedule(String command) {
+        schedule(command, null);
+    }
+
+    private void schedule(String command, KWargs options) {
         KWargs msg = new KWargs();
         msg.put("command", command);
+        msg.put("options", options);
         try {
             queue.put(msg);
         } catch (InterruptedException e) {
@@ -136,6 +142,11 @@ public class Scheduler implements Runnable, PlayerGuard.Callback {
         now_playing.set(null);
     }
 
+    private void track_error(String message) {
+        events.onerror(now_playing.get(), message);
+        track_finished();
+    }
+
     private void notify_playlist_on_track_finished(Item item) {
         if (playlist != null) {
             playlist.onfinished(item);
@@ -160,8 +171,8 @@ public class Scheduler implements Runnable, PlayerGuard.Callback {
                 stop();
             }
         }
-        player.play(item);
         now_playing.set(item);
+        player.play(item);
     }
 
     private void resume(Item item, Integer position_ms) {
@@ -181,12 +192,22 @@ public class Scheduler implements Runnable, PlayerGuard.Callback {
         Logger.debug(this, "entering scheduler loop");
         while (!thread.isInterrupted()) {
             try {
-                KWargs msg = queue.poll(1, TimeUnit.SECONDS);
-                if (msg != null && msg.fetch("command", String.class, null).equals("track_finished")) {
-                    track_finished();
-                } else if (msg != null && msg.fetch("command", String.class, null).equals("start_playlist")) {
-                    start_playlist();
-                    continue; // give it some time to start, do not run scheduler yet
+                final KWargs msg = queue.poll(1, TimeUnit.SECONDS);
+                if (msg != null) {
+                    final String command = msg.fetch("command", String.class, null);
+                    final KWargs options = msg.fetch("options", KWargs.class, null);
+                    if (command.equals("track_finished")) {
+                        track_finished();
+                    } else if (command.equals("track_error")) {
+                        if (options != null) {
+                            track_error(options.fetch("message", String.class, ""));
+                        } else {
+                            track_error("");
+                        }
+                    } else if (command.equals("start_playlist")) {
+                        start_playlist();
+                        continue; // give it some time to start, do not run scheduler yet
+                    }
                 }
             } catch (InterruptedException e) {
                 Logger.warning(this, "scheduler loop interrupted");

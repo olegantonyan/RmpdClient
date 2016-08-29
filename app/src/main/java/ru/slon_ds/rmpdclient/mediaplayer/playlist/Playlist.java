@@ -112,9 +112,11 @@ public class Playlist {
     }
 
     private Integer background_item_position(Item item) {
-        for (int i = 0; i < background.size(); i++) {
-            if (item.id().equals(background.get(i).id())) {
-                return i;
+        if (background.size() > 0) {
+            for (int i = 0; i < background.size(); i++) {
+                if (item.id().equals(background.get(i).id())) {
+                    return i;
+                }
             }
         }
         return null;
