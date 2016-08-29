@@ -1,21 +1,19 @@
 package ru.slon_ds.rmpdclient.mediaplayer.player.commands;
 
-import android.widget.VideoView;
-
-import ru.slon_ds.rmpdclient.mediaplayer.player.ImagePlayer;
+import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerInterface;
 import ru.slon_ds.rmpdclient.utils.KWargs;
 
 public class TimePos extends BaseCommand {
-    public TimePos(VideoView vv, ImagePlayer ip, KWargs options) {
-        super(vv, ip, options);
+    public TimePos(PlayerInterface p, KWargs options) {
+        super(p, options);
     }
 
     @Override
     public KWargs call() {
         KWargs result = new KWargs();
         int ms = 0;
-        if (video_view.isPlaying()) {
-            ms = video_view.getCurrentPosition();
+        if (player.is_playing()) {
+            ms = player.time_ms_pos();
         }
         result.put("result", ms);
         result.put("units", "ms");

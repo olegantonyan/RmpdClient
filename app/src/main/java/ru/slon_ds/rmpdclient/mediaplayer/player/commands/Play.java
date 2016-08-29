@@ -1,32 +1,31 @@
 package ru.slon_ds.rmpdclient.mediaplayer.player.commands;
 
-import android.widget.VideoView;
-
 import java.io.File;
 
-import ru.slon_ds.rmpdclient.mediaplayer.player.ImagePlayer;
+import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerInterface;
 import ru.slon_ds.rmpdclient.mediaplayer.playlist.Item;
 import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class Play extends BaseCommand {
-    public Play(VideoView vv, ImagePlayer ip, KWargs options) {
-        super(vv, ip, options);
+    public Play(PlayerInterface p, KWargs options) {
+        super(p, options);
     }
 
     @Override
     public KWargs call() {
-        String path = options.fetch("item", Item.class, null).filepath();
-        if (path == null) {
-            Logger.error(this, "file path is null");
-        } else if (new File(path).exists()) {
-            Logger.info(this, "starting track " + path);
-            video_view.setVideoPath(path);
-            video_view.start();
-            // video_view.setZOrderOnTop(true);
-            // video_view.requestFocus();
+        final Item item = options.fetch("item", Item.class, null);
+        if (item == null) {
+            Logger.error(this, "item is null");
         } else {
-            Logger.error(this, "file " + path + " does not exists");
+            final String path = item.filepath();
+            if (new File(path).exists()) {
+                final String type = item.content_type();
+                Logger.info(this, "starting track " + path + " (" + type + ")");
+                player.play(path, type, item.show_duration() * 1000);
+            } else {
+                Logger.error(this, "file " + path + " does not exists");
+            }
         }
         return new KWargs();
     }

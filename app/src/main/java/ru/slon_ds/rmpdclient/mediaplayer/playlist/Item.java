@@ -1,5 +1,7 @@
 package ru.slon_ds.rmpdclient.mediaplayer.playlist;
 
+import android.webkit.MimeTypeMap;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -103,15 +105,18 @@ public class Item {
     }
 
     public String content_type() {
-        return d.fetch("content_type", String.class);
-    }
-
-    public boolean is_image() {
-        return content_type() != null && content_type().startsWith("image/");
+        String t = d.fetch("content_type", String.class);
+        if (t == null) {
+            String extension = MimeTypeMap.getFileExtensionFromUrl(filename());
+            if (extension != null) {
+                t = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+            }
+        }
+        return t;
     }
 
     public Integer show_duration() {
-        return d.fetch("show_duration", Integer.class);
+        return d.fetch("show_duration", Integer.class, 0);
     }
 
     public ArrayList<ScheduleInterval> schedule_intervals() {
