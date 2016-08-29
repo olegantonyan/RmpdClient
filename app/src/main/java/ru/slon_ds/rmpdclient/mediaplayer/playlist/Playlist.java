@@ -91,10 +91,12 @@ public class Playlist {
 
     private Item find_next_appropriate(ArrayList<Item> collection, Integer start_pos, Integer end_pos) {
         Date thetime = new Date();
-        for (int i = start_pos; i < end_pos; i++) {
-            Item item = collection.get(i);
-            if (item.is_appropriate_at(thetime)) {
-                return item;
+        if (collection.size() > 0) {
+            for (int i = start_pos; i < end_pos; i++) {
+                Item item = collection.get(i);
+                if (item.is_appropriate_at(thetime)) {
+                    return item;
+                }
             }
         }
         return null;
