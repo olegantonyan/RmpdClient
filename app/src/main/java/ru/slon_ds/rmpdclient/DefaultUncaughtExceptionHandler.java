@@ -32,7 +32,7 @@ public class DefaultUncaughtExceptionHandler implements Thread.UncaughtException
         Intent me = AndroidApplication.context().getPackageManager().getLaunchIntentForPackage(AndroidApplication.context().getPackageName());
         PendingIntent pi = PendingIntent.getActivity(AndroidApplication.context(), 0, me, PendingIntent.FLAG_ONE_SHOT);
         AlarmManager mgr = (AlarmManager) AndroidApplication.context().getSystemService(Context.ALARM_SERVICE);
-        mgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 2000, pi);
+        mgr.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 3000, pi);
 
         activity.finish();
         android.os.Process.killProcess(android.os.Process.myPid());
