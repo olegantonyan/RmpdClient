@@ -10,6 +10,6 @@ public class UsbAttachedReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         UsbDevice device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
-        throw new RuntimeException("USB OTG attached: " + device.toString()); // causing restart
+        throw new RuntimeException("USB OTG attached: " + (device == null ? "" : device.toString())); // causing restart
     }
 }

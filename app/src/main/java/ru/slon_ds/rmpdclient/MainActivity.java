@@ -78,6 +78,15 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (!hasFocus) {
+            Intent close_dialog = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+            sendBroadcast(close_dialog);
+        }
+    }
+
+    @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         return gesture_detector.onTouchEvent(motionEvent) || super.onTouchEvent(motionEvent);
     }
