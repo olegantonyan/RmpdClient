@@ -30,16 +30,4 @@ public class Control {
             return false;
         }
     }
-
-    public static boolean set_usb_device_disabled(boolean enable_adb) {
-        try {
-            Process process = Runtime.getRuntime().exec("setprop persist.sys.usb.config " + (enable_adb ? "adb" : "none") + "\n");
-            DataOutputStream os = new DataOutputStream(process.getOutputStream());
-            os.flush();
-            process.waitFor();
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
 }

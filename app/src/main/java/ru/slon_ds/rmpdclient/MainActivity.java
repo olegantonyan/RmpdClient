@@ -13,7 +13,6 @@ import android.widget.VideoView;
 
 import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerGuard;
 import ru.slon_ds.rmpdclient.utils.Config;
-import ru.slon_ds.rmpdclient.utils.Control;
 import ru.slon_ds.rmpdclient.utils.Logger;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
@@ -48,8 +47,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
             launch_settings_activity();
         }
         Thread.setDefaultUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(this));
-
-        Control.set_usb_device_disabled(BuildConfig.DEBUG);
     }
 
     private void launch_settings_activity() {
