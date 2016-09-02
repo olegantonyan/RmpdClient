@@ -2,8 +2,6 @@ package ru.slon_ds.rmpdclient.utils;
 
 import android.os.StatFs;
 
-import java.io.DataOutputStream;
-
 public class Control {
     public static Long free_space(String path) {
         try {
@@ -18,14 +16,29 @@ public class Control {
 
     public static boolean set_systemui_disabled(boolean disabled) {
         try {
-            Process process = Runtime.getRuntime().exec("su");
-            DataOutputStream os = new DataOutputStream(process.getOutputStream());
-            os.writeBytes("pm " + (disabled ? "disable" : "enable") + " com.android.systemui\n");
-            os.flush();
-            os.writeBytes("exit\n");
-            os.flush();
+            Process process = Runtime.getRuntime().exec(new String[] { "su", "-c", "pm", (disabled ? "disable" : "enable"), "com.android.systemui"});
             process.waitFor();
-            return true;
+            return process.exitValue() == 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static boolean self_update(String apk_path) {
+        try {
+            Process process = Runtime.getRuntime().exec(new String[] { "su", "-c", "pm", "install", "-r", "-d", apk_path});
+            process.waitFor();
+            return process.exitValue() == 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static boolean reboot() {
+        try {
+            Process process = Runtime.getRuntime().exec(new String[] { "su", "-c", "reboot" });
+            process.waitFor();
+            return process.exitValue() == 0;
         } catch (Exception e) {
             return false;
         }
