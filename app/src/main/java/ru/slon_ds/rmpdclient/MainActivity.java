@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         if (Config.instance().first_run()) {
             launch_settings_activity();
         }
-        Thread.setDefaultUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(this));
     }
 
     private void launch_settings_activity() {

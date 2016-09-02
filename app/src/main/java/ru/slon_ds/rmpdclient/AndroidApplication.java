@@ -5,12 +5,15 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 
+import com.github.anrwatchdog.ANRWatchDog;
+
 public class AndroidApplication extends Application {
     private static Context _context = null;
 
     public void onCreate() {
         super.onCreate();
         _context = getApplicationContext();
+        setup_watchdogs();
     }
 
     public static Context context() {
@@ -45,5 +48,15 @@ public class AndroidApplication extends Application {
         } catch (PackageManager.NameNotFoundException e ){
             return "NULL";
         }
+    }
+
+    private void setup_watchdogs() {
+        DefaultUncaughtExceptionHandler exception_handler = new DefaultUncaughtExceptionHandler();
+
+        Thread.setDefaultUncaughtExceptionHandler(exception_handler);
+
+        ANRWatchDog anr_wdt = new ANRWatchDog();
+        anr_wdt.setANRListener(exception_handler);
+        anr_wdt.start();
     }
 }
