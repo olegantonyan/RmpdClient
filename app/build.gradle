@@ -8,8 +8,8 @@ android {
         applicationId "ru.slon_ds.rmpdclient"
         minSdkVersion 16
         targetSdkVersion 24
-        versionCode 15
-        versionName "0.0.15"
+        versionCode 16
+        versionName "0.0.16"
     }
     buildTypes {
         release {
@@ -24,4 +24,5 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.+'
     compile 'com.android.support:support-v4:24.+'
+    compile 'com.github.anrwatchdog:anrwatchdog:1.3.+'
 }
