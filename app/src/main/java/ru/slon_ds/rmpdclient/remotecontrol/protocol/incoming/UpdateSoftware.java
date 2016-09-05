@@ -2,6 +2,8 @@ package ru.slon_ds.rmpdclient.remotecontrol.protocol.incoming;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import ru.slon_ds.rmpdclient.remotecontrol.ControlWrapper;
 import ru.slon_ds.rmpdclient.remotecontrol.HttpClient;
@@ -28,17 +30,29 @@ public class UpdateSoftware extends BaseCommand {
             }
             Logger.info(this, "downloading update apk " + url + " to " + localpath);
             HttpClient.new_default().download_file(Files.full_url_by_relative(url), localpath, 3);
-            if (Control.self_update(localpath)) {
-                ack(true, "hope that software update will be successful");
-                Control.reboot();
-                return true;
-            } else {
-                ack(false, "error installing software update");
-            }
-            return false;
+            ack(true, "hope that software update will be successful");
+            Timer tmr = new Timer();
+            tmr.schedule(new ScheduledUpdate(localpath), 5000);
+            return true;
         } catch (Exception e) {
             Logger.exception(this, "software update error", e);
             return false;
+        }
+    }
+
+    class ScheduledUpdate extends TimerTask {
+        private String localpath = null;
+
+        public ScheduledUpdate(String localpath) {
+            super();
+            this.localpath = localpath;
+
+        }
+
+        @Override
+        public void run() {
+            Control.self_update(localpath);
+            // no way to get here, self_update will reboot the device
         }
     }
 }
