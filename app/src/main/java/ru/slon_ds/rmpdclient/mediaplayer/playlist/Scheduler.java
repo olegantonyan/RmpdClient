@@ -6,6 +6,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerGuard;
+import ru.slon_ds.rmpdclient.mediaplayer.player.Watchdog;
 import ru.slon_ds.rmpdclient.remotecontrol.ProtocolDispatcher;
 import ru.slon_ds.rmpdclient.utils.KWargs;
 import ru.slon_ds.rmpdclient.utils.Logger;
@@ -18,6 +19,7 @@ public class Scheduler implements Runnable, PlayerGuard.Callback {
     private PreemptedTrack preempted_track = null;
     private PlaybackEvents events = null;
     private Thread thread = null;
+    private Watchdog wdt = null;
 
     public Scheduler(PlayerGuard player_guard) {
         queue = new LinkedBlockingQueue<>();
@@ -25,6 +27,7 @@ public class Scheduler implements Runnable, PlayerGuard.Callback {
         events = new PlaybackEvents(ProtocolDispatcher.instance());
         now_playing = new NowPlaying();
         player = new PlayerProxy(player_guard, events, now_playing);
+        wdt = new Watchdog();
         thread = new Thread(this);
         thread.start();
     }
@@ -120,6 +123,7 @@ public class Scheduler implements Runnable, PlayerGuard.Callback {
             play(null);
         }
         reset_preempted();
+        wdt.reset();
         if (playlist != null) {
             Item start_item = playlist.first_background();
             if (start_item == null) {
@@ -143,7 +147,9 @@ public class Scheduler implements Runnable, PlayerGuard.Callback {
     }
 
     private void track_error(String message) {
-        events.onerror(now_playing.get(), message);
+        Item track = now_playing.get();
+        events.onerror(track, message);
+        wdt.error_with(track);
         track_finished();
     }
 
@@ -164,6 +170,10 @@ public class Scheduler implements Runnable, PlayerGuard.Callback {
             stop();
             return;
         }
+        if (!wdt.is_ok_to_start(item)) {
+            Logger.debug(this, "playback prevented by watchdog: " + item.toString());
+            return;
+        }
         if (player.is_playing()) {
             if (item.is_advertising()) {
                 suspend();
@@ -176,6 +186,10 @@ public class Scheduler implements Runnable, PlayerGuard.Callback {
     }
 
     private void resume(Item item, Integer position_ms) {
+        if (!wdt.is_ok_to_resume(item)) {
+            Logger.debug(this, "resume prevented by watchdog: " + item.toString());
+            return;
+        }
         player.resume(item, position_ms);
         Logger.info(this, "track resumed '" + item.filename() + "' at " + position_ms.toString() + " ms");
         now_playing.set(item);
