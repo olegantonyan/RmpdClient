@@ -23,14 +23,4 @@ public class Control {
             return false;
         }
     }
-
-    public static boolean self_update(String apk_path) {
-        try {
-            Process process = Runtime.getRuntime().exec(new String[] { "su", "-c", "pm", "install", "-r", "-d", apk_path, "&&", "su", "-c", "reboot"});
-            process.waitFor();
-            return process.exitValue() == 0;
-        } catch (Exception e) {
-            return false;
-        }
-    }
 }

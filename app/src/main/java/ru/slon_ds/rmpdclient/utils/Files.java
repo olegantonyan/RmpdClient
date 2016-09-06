@@ -48,6 +48,10 @@ public class Files {
         return Config.instance().storage_path() + "/wallpaper";
     }
 
+    public static String software_update_filepath() {
+        return temp_path() + "/update.apk";
+    }
+
 
 
     public static URL full_url_by_relative(String relative) throws MalformedURLException {

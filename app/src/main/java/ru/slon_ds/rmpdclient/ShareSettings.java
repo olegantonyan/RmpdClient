@@ -35,6 +35,7 @@ public class ShareSettings {
             result.put("base_storage_path", Files.base_storage_path());
             result.put("temp_path", Files.temp_path());
             result.put("logs_path", Files.logs_path());
+            result.put("software_update_filepath", Files.software_update_filepath());
         } catch (JSONException e) {
             Logger.exception(this, "error creating share settings", e);
         }
