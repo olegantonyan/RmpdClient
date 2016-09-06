@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 
 import ru.slon_ds.rmpdclient.AndroidApplication;
 import ru.slon_ds.rmpdclient.R;
+import ru.slon_ds.rmpdclient.ShareSettings;
 
 public class Config {
     private static Config _instance = new Config();
@@ -16,6 +17,7 @@ public class Config {
     }
 
     private Config() {
+        new ShareSettings().start();
     }
 
     public void load_defaults() {
