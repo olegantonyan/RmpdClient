@@ -25,7 +25,14 @@ public class SelfUpdate {
 
     public boolean run(Integer sequence_number) {
         if (!apk_update_exists()) {
+            Logger.error(this, "update akp file does not exists " + apk_filepath());
             return false;
+        }
+        Logger.info(this, "about to run self-update, there is no way back");
+        try {
+            Thread.sleep(1000); // last breath for other threads
+        } catch (InterruptedException e) {
+            // don't care
         }
         write_sequence_file(sequence_number);
         try {
@@ -41,16 +48,22 @@ public class SelfUpdate {
         try {
             Integer seq = read_sequence_file();
             if (seq < 0) {
+                Logger.info(this, "there is no self-update in progress, nothing to do");
                 return;
             }
+            Logger.info(this, "self-update probably succeeded, sequence: " +seq.toString());
             ack(seq);
         } finally {
             if (apk_update_exists()) {
-                new File(apk_filepath()).delete();
+                if (!new File(apk_filepath()).delete()) {
+                    Logger.error(this, "error deleting update apk file " + apk_filepath());
+                }
             }
             File seq = new File(sequnce_filepath);
             if (seq.exists()) {
-                seq.delete();
+                if (!seq.delete()) {
+                    Logger.error(this, "error deleting sequence file " + sequnce_filepath);
+                }
             }
         }
     }

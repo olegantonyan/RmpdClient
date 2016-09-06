@@ -55,7 +55,7 @@ public class AndroidApplication extends Application {
 
         Thread.setDefaultUncaughtExceptionHandler(exception_handler);
 
-        ANRWatchDog anr_wdt = new ANRWatchDog(15000);
+        ANRWatchDog anr_wdt = new ANRWatchDog();
         anr_wdt.setANRListener(exception_handler);
         anr_wdt.start();
     }
