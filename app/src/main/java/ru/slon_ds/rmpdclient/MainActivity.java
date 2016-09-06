@@ -12,8 +12,8 @@ import android.widget.ImageView;
 import android.widget.VideoView;
 
 import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerGuard;
-import ru.slon_ds.rmpdclient.utils.Config;
-import ru.slon_ds.rmpdclient.utils.Logger;
+import ru.slon_ds.rmpdclient.common.Config;
+import ru.slon_ds.rmpdclient.common.Logger;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
     private Main main = null;

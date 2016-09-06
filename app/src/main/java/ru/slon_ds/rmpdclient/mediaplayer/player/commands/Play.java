@@ -5,7 +5,7 @@ import java.io.File;
 import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerInterface;
 import ru.slon_ds.rmpdclient.mediaplayer.playlist.Item;
 import ru.slon_ds.rmpdclient.utils.KWargs;
-import ru.slon_ds.rmpdclient.utils.Logger;
+import ru.slon_ds.rmpdclient.common.Logger;
 
 public class Play extends BaseCommand {
     public Play(PlayerInterface p, KWargs options) {

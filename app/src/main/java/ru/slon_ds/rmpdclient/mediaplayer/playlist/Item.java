@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import ru.slon_ds.rmpdclient.utils.DateOnly;
-import ru.slon_ds.rmpdclient.utils.Files;
+import ru.slon_ds.rmpdclient.common.Files;
 import ru.slon_ds.rmpdclient.utils.JsonDict;
 import ru.slon_ds.rmpdclient.utils.TimeOnly;
 

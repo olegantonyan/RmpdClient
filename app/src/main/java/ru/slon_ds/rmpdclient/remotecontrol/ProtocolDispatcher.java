@@ -5,7 +5,7 @@ import ru.slon_ds.rmpdclient.remotecontrol.protocol.Receiver;
 import ru.slon_ds.rmpdclient.remotecontrol.protocol.Sender;
 import ru.slon_ds.rmpdclient.utils.JsonDict;
 import ru.slon_ds.rmpdclient.utils.KWargs;
-import ru.slon_ds.rmpdclient.utils.Logger;
+import ru.slon_ds.rmpdclient.common.Logger;
 
 public class ProtocolDispatcher implements ControlWrapper.OnMessageCallback {
     private static ProtocolDispatcher _instance = null;

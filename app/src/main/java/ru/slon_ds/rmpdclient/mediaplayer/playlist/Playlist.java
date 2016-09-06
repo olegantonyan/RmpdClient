@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.Date;
 
 import ru.slon_ds.rmpdclient.utils.JsonDict;
-import ru.slon_ds.rmpdclient.utils.Logger;
+import ru.slon_ds.rmpdclient.common.Logger;
 
 public class Playlist {
     private JsonDict data = null;

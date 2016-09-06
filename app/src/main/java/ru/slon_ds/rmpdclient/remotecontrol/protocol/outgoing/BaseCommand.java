@@ -8,11 +8,11 @@ import java.util.Locale;
 
 import ru.slon_ds.rmpdclient.mediaplayer.playlist.Item;
 import ru.slon_ds.rmpdclient.remotecontrol.ControlWrapper;
-import ru.slon_ds.rmpdclient.utils.Control;
-import ru.slon_ds.rmpdclient.utils.Files;
+import ru.slon_ds.rmpdclient.common.Control;
+import ru.slon_ds.rmpdclient.common.Files;
 import ru.slon_ds.rmpdclient.utils.JsonDict;
 import ru.slon_ds.rmpdclient.utils.KWargs;
-import ru.slon_ds.rmpdclient.utils.Logger;
+import ru.slon_ds.rmpdclient.common.Logger;
 import ru.slon_ds.rmpdclient.utils.Support;
 
 public class BaseCommand {

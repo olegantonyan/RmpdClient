@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 import ru.slon_ds.rmpdclient.mediaplayer.playlist.Loader;
 import ru.slon_ds.rmpdclient.remotecontrol.HttpClient;
-import ru.slon_ds.rmpdclient.utils.Files;
-import ru.slon_ds.rmpdclient.utils.Logger;
+import ru.slon_ds.rmpdclient.common.Files;
+import ru.slon_ds.rmpdclient.common.Logger;
 
 public class DownloadWorker extends Thread {
     private ArrayList<URL> urls = new ArrayList<>();

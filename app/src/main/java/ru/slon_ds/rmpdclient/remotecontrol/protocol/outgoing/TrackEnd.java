@@ -3,7 +3,7 @@ package ru.slon_ds.rmpdclient.remotecontrol.protocol.outgoing;
 import ru.slon_ds.rmpdclient.mediaplayer.playlist.Item;
 import ru.slon_ds.rmpdclient.remotecontrol.ControlWrapper;
 import ru.slon_ds.rmpdclient.utils.KWargs;
-import ru.slon_ds.rmpdclient.utils.Logger;
+import ru.slon_ds.rmpdclient.common.Logger;
 
 public class TrackEnd extends BaseCommand {
     public TrackEnd(ControlWrapper control_wrapper) {

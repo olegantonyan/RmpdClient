@@ -3,7 +3,7 @@ package ru.slon_ds.rmpdclient.remotecontrol.playlist;
 import java.net.URL;
 import java.util.ArrayList;
 
-import ru.slon_ds.rmpdclient.utils.Logger;
+import ru.slon_ds.rmpdclient.common.Logger;
 
 public class DownloadWorkerManager {
     private static DownloadWorkerManager _instance = new DownloadWorkerManager();

@@ -1,6 +1,6 @@
 package ru.slon_ds.rmpdclient.mediaplayer.playlist;
 
-import ru.slon_ds.rmpdclient.utils.Logger;
+import ru.slon_ds.rmpdclient.common.Logger;
 
 public class NowPlaying {
     private Item item = null;

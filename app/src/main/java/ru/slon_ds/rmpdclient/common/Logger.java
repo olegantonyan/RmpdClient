@@ -1,4 +1,4 @@
-package ru.slon_ds.rmpdclient.utils;
+package ru.slon_ds.rmpdclient.common;
 
 import android.util.Log;
 

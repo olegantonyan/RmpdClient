@@ -8,7 +8,7 @@ import java.util.TimeZone;
 import ru.slon_ds.rmpdclient.AndroidApplication;
 import ru.slon_ds.rmpdclient.remotecontrol.ControlWrapper;
 import ru.slon_ds.rmpdclient.utils.JsonDict;
-import ru.slon_ds.rmpdclient.utils.Logger;
+import ru.slon_ds.rmpdclient.common.Logger;
 
 public class UpdateSetting extends BaseCommand {
     public UpdateSetting(ControlWrapper control_wrapper, JsonDict data, Integer sequence_number) {

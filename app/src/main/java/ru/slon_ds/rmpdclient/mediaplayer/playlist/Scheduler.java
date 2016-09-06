@@ -9,7 +9,7 @@ import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerGuard;
 import ru.slon_ds.rmpdclient.mediaplayer.player.Watchdog;
 import ru.slon_ds.rmpdclient.remotecontrol.ProtocolDispatcher;
 import ru.slon_ds.rmpdclient.utils.KWargs;
-import ru.slon_ds.rmpdclient.utils.Logger;
+import ru.slon_ds.rmpdclient.common.Logger;
 
 public class Scheduler implements Runnable, PlayerGuard.Callback {
     private PlayerProxy player = null;

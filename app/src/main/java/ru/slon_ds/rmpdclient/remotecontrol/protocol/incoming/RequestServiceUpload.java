@@ -2,8 +2,8 @@ package ru.slon_ds.rmpdclient.remotecontrol.protocol.incoming;
 
 import ru.slon_ds.rmpdclient.remotecontrol.ControlWrapper;
 import ru.slon_ds.rmpdclient.utils.JsonDict;
-import ru.slon_ds.rmpdclient.utils.Logger;
-import ru.slon_ds.rmpdclient.utils.ServiceUpload;
+import ru.slon_ds.rmpdclient.common.Logger;
+import ru.slon_ds.rmpdclient.common.ServiceUpload;
 
 public class RequestServiceUpload extends BaseCommand implements Runnable {
     public RequestServiceUpload(ControlWrapper control_wrapper, JsonDict data, Integer sequence_number) {

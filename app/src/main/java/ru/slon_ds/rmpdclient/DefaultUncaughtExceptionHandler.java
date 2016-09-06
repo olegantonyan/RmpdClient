@@ -12,7 +12,7 @@ import com.github.anrwatchdog.ANRWatchDog;
 
 import java.util.Locale;
 
-import ru.slon_ds.rmpdclient.utils.Logger;
+import ru.slon_ds.rmpdclient.common.Logger;
 
 public class DefaultUncaughtExceptionHandler implements Thread.UncaughtExceptionHandler, ANRWatchDog.ANRListener {
     @Override

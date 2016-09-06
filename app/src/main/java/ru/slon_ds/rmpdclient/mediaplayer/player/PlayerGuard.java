@@ -12,7 +12,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import ru.slon_ds.rmpdclient.mediaplayer.player.commands.BaseCommand;
 import ru.slon_ds.rmpdclient.utils.KWargs;
-import ru.slon_ds.rmpdclient.utils.Logger;
+import ru.slon_ds.rmpdclient.common.Logger;
 import ru.slon_ds.rmpdclient.utils.Support;
 
 public class PlayerGuard extends Handler implements PlayerInterface.Callback {

@@ -1,11 +1,12 @@
 package ru.slon_ds.rmpdclient;
 
+import ru.slon_ds.rmpdclient.common.Logger;
+import ru.slon_ds.rmpdclient.common.SelfUpdate;
+import ru.slon_ds.rmpdclient.common.ServiceUpload;
 import ru.slon_ds.rmpdclient.mediaplayer.PlayerController;
 import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerGuard;
 import ru.slon_ds.rmpdclient.remotecontrol.ProtocolDispatcher;
 import ru.slon_ds.rmpdclient.utils.KWargs;
-import ru.slon_ds.rmpdclient.utils.Logger;
-import ru.slon_ds.rmpdclient.utils.ServiceUpload;
 
 public class Main extends Thread {
     private PlayerGuard player_guard = null;
@@ -20,12 +21,22 @@ public class Main extends Thread {
     public void run() {
         setName("main_loop");
         setPriority(Thread.MIN_PRIORITY);
+
         Logger.info(this, "started");
+
         ProtocolDispatcher proto = ProtocolDispatcher.instance();
+
         PlayerController player = new PlayerController(player_guard);
         player.load_wallpaper();
         player.start_playlist();
+
         check_previous_crash();
+
+        // ShareSettings share_settings = new ShareSettings();
+        // share_settings.start();
+
+        new SelfUpdate().verify();
+
         while (!isInterrupted()) {
             KWargs kw = new KWargs();
             kw.put("percent_position", player.current_track_position());
@@ -40,7 +51,11 @@ public class Main extends Thread {
             }
         }
         Logger.info(this, "finishing main");
+
+        // share_settings.stop();
+
         player.quit();
+
         proto.quit();
     }
 

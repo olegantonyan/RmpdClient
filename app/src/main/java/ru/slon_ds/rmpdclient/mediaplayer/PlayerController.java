@@ -10,9 +10,9 @@ import ru.slon_ds.rmpdclient.mediaplayer.playlist.Loader;
 import ru.slon_ds.rmpdclient.mediaplayer.playlist.Playlist;
 import ru.slon_ds.rmpdclient.mediaplayer.playlist.Scheduler;
 import ru.slon_ds.rmpdclient.remotecontrol.ProtocolDispatcher;
-import ru.slon_ds.rmpdclient.utils.Files;
+import ru.slon_ds.rmpdclient.common.Files;
 import ru.slon_ds.rmpdclient.utils.KWargs;
-import ru.slon_ds.rmpdclient.utils.Logger;
+import ru.slon_ds.rmpdclient.common.Logger;
 
 public class PlayerController {
     private Scheduler scheduler = null;

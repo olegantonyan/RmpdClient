@@ -5,7 +5,7 @@ import java.io.File;
 import ru.slon_ds.rmpdclient.mediaplayer.PlayerController;
 import ru.slon_ds.rmpdclient.remotecontrol.ControlWrapper;
 import ru.slon_ds.rmpdclient.remotecontrol.playlist.DownloadWorkerManager;
-import ru.slon_ds.rmpdclient.utils.Files;
+import ru.slon_ds.rmpdclient.common.Files;
 import ru.slon_ds.rmpdclient.utils.JsonDict;
 
 public class DeletePlaylist extends BaseCommand {

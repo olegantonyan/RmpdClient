@@ -10,10 +10,10 @@ import ru.slon_ds.rmpdclient.mediaplayer.playlist.Loader;
 import ru.slon_ds.rmpdclient.remotecontrol.ControlWrapper;
 import ru.slon_ds.rmpdclient.remotecontrol.playlist.DownloadWorker;
 import ru.slon_ds.rmpdclient.remotecontrol.playlist.DownloadWorkerManager;
-import ru.slon_ds.rmpdclient.utils.Files;
+import ru.slon_ds.rmpdclient.common.Files;
 import ru.slon_ds.rmpdclient.utils.JsonDict;
 import ru.slon_ds.rmpdclient.utils.KWargs;
-import ru.slon_ds.rmpdclient.utils.Logger;
+import ru.slon_ds.rmpdclient.common.Logger;
 
 public class UpdatePlaylist extends BaseCommand implements DownloadWorker.OnDownloadFinishedCallback {
     public UpdatePlaylist(ControlWrapper control_wrapper, JsonDict data, Integer sequence_number) {

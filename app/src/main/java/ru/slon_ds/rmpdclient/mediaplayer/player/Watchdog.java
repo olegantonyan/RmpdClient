@@ -3,7 +3,7 @@ package ru.slon_ds.rmpdclient.mediaplayer.player;
 import java.util.HashMap;
 
 import ru.slon_ds.rmpdclient.mediaplayer.playlist.Item;
-import ru.slon_ds.rmpdclient.utils.Logger;
+import ru.slon_ds.rmpdclient.common.Logger;
 
 public class Watchdog {
     private HashMap<Item, Integer> failures = null;

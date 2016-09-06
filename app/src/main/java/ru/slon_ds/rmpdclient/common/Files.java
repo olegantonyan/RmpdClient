@@ -1,4 +1,4 @@
-package ru.slon_ds.rmpdclient.utils;
+package ru.slon_ds.rmpdclient.common;
 
 import android.os.Environment;
 
@@ -47,11 +47,6 @@ public class Files {
     public static String wallpaper_filepath() {
         return Config.instance().storage_path() + "/wallpaper";
     }
-
-    public static String software_update_filepath() {
-        return temp_path() + "/update.apk";
-    }
-
 
 
     public static URL full_url_by_relative(String relative) throws MalformedURLException {

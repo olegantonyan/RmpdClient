@@ -17,7 +17,7 @@ import java.util.TimeZone;
 
 import ru.slon_ds.rmpdclient.AndroidApplication;
 import ru.slon_ds.rmpdclient.utils.JsonDict;
-import ru.slon_ds.rmpdclient.utils.Logger;
+import ru.slon_ds.rmpdclient.common.Logger;
 
 public class MessageQueue extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;

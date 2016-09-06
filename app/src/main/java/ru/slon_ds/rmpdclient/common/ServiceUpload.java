@@ -1,4 +1,4 @@
-package ru.slon_ds.rmpdclient.utils;
+package ru.slon_ds.rmpdclient.common;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import ru.slon_ds.rmpdclient.remotecontrol.HttpClient;
+import ru.slon_ds.rmpdclient.utils.KWargs;
+import ru.slon_ds.rmpdclient.utils.ZipArchive;
 
 public class ServiceUpload implements Runnable {
     private String reason = null;

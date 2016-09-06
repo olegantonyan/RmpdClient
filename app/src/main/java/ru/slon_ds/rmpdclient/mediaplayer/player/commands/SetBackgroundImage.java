@@ -4,7 +4,7 @@ import android.graphics.drawable.Drawable;
 
 import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerInterface;
 import ru.slon_ds.rmpdclient.utils.KWargs;
-import ru.slon_ds.rmpdclient.utils.Logger;
+import ru.slon_ds.rmpdclient.common.Logger;
 
 public class SetBackgroundImage extends BaseCommand {
     public SetBackgroundImage(PlayerInterface p, KWargs options) {

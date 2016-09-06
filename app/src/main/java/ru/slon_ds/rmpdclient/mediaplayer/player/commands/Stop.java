@@ -2,7 +2,7 @@ package ru.slon_ds.rmpdclient.mediaplayer.player.commands;
 
 import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerInterface;
 import ru.slon_ds.rmpdclient.utils.KWargs;
-import ru.slon_ds.rmpdclient.utils.Logger;
+import ru.slon_ds.rmpdclient.common.Logger;
 
 public class Stop extends BaseCommand {
     public Stop(PlayerInterface p, KWargs options) {

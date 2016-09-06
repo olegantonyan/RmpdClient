@@ -20,11 +20,11 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import ru.slon_ds.rmpdclient.AndroidApplication;
-import ru.slon_ds.rmpdclient.utils.Config;
-import ru.slon_ds.rmpdclient.utils.Files;
+import ru.slon_ds.rmpdclient.common.Config;
+import ru.slon_ds.rmpdclient.common.Files;
 import ru.slon_ds.rmpdclient.utils.JsonDict;
 import ru.slon_ds.rmpdclient.utils.KWargs;
-import ru.slon_ds.rmpdclient.utils.Logger;
+import ru.slon_ds.rmpdclient.common.Logger;
 
 public class HttpClient {
     private URL server_url_base;

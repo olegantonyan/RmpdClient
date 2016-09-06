@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
-import ru.slon_ds.rmpdclient.utils.Control;
+import ru.slon_ds.rmpdclient.common.Control;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On

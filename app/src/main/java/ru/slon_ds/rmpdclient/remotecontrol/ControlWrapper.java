@@ -4,7 +4,7 @@ import java.net.MalformedURLException;
 import java.util.Locale;
 
 import ru.slon_ds.rmpdclient.utils.JsonDict;
-import ru.slon_ds.rmpdclient.utils.Logger;
+import ru.slon_ds.rmpdclient.common.Logger;
 
 public class ControlWrapper implements Runnable {
     private OnMessageCallback callback = null;
