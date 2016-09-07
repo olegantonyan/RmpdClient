@@ -19,6 +19,12 @@
     <string name="pref_title_autostart">Autostart on boot</string>
     <string name="pref_key_autostart" translatable="false">autostart</string>
 
+    <string name="pref_key_launch_system_settings" translatable="false">launch_system_settings</string>
+    <string name="pref_title_open_system_settings">Open system settings</string>
+
+    <string name="pref_title_version">Application version</string>
+    <string name="pref_key_version" translatable="false">app_version</string>
+
 
     <!-- Settings for Network -->
     <string name="pref_header_network">Network</string>

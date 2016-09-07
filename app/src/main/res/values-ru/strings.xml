@@ -16,4 +16,6 @@
     <string name="pref_title_verbose_logging">Подробное логгирование</string>
     <string name="pref_description_verbose_logging">Писать подробный лог-файл. Не включайте если точно не уверены что это необходимо</string>
     <string name="pref_header_logging">Логгирование</string>
+    <string name="pref_title_open_system_settings">Открыть системные настройки</string>
+    <string name="pref_title_version">Версия приложения</string>
 </resources>

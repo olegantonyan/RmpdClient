@@ -17,4 +17,14 @@
         android:key="@string/pref_key_disable_sustemui"
         android:title="@string/pref_title_disable_sustemui" />
 
+    <Preference
+        android:title="@string/pref_title_open_system_settings"
+        android:persistent="false"
+        android:key="@string/pref_key_launch_system_settings"/>
+
+    <Preference
+        android:title="@string/pref_title_version"
+        android:persistent="false"
+        android:key="@string/pref_key_version"/>
+
 </PreferenceScreen>

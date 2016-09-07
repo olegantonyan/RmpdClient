@@ -3,6 +3,7 @@ package ru.slon_ds.rmpdclient;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -187,6 +188,18 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // guidelines.
             final Resources res = getResources();
             bindPreferenceSummaryToValue(findPreference(res.getString(R.string.pref_key_storage_path)));
+
+            Preference system_settings = findPreference(res.getString(R.string.pref_key_launch_system_settings));
+            system_settings.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+                    return true;
+                }
+            });
+
+            Preference version = findPreference(res.getString(R.string.pref_key_version));
+            version.setSummary(AndroidApplication.version());
         }
 
         @Override
