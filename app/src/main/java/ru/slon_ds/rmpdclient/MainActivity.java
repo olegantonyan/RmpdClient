@@ -11,9 +11,9 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.VideoView;
 
-import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerGuard;
 import ru.slon_ds.rmpdclient.common.Config;
 import ru.slon_ds.rmpdclient.common.Logger;
+import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerGuard;
 
 public class MainActivity extends AppCompatActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
     private Main main = null;
@@ -53,12 +53,15 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         startActivity(intent);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+    private synchronized void stop_main() {
+        if (main != null) {
+            main.quit();
+        }
+    }
 
+    private synchronized void start_main() {
         if (main != null && main.isAlive()) {
-            main.interrupt();
+            stop_main();
         }
 
         Logger.debug(this, "starting main");
@@ -67,13 +70,15 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        start_main();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
-
-        if (main != null) {
-            Logger.debug(this, "stopping main");
-            main.interrupt();
-        }
+        stop_main();
     }
 
     @Override

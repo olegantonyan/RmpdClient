@@ -64,6 +64,11 @@ public class ControlWrapper implements Runnable {
         if (thread != null) {
             Logger.debug(this, "control wrapper was told to quit...");
             thread.interrupt();
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                Logger.exception(this, "waiting for control wrapper loop to finish interrupted", e);
+            }
         }
     }
 

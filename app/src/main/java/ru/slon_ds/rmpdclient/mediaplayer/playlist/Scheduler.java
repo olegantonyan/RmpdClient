@@ -66,6 +66,11 @@ public class Scheduler implements Runnable, PlayerGuard.Callback {
         if (thread != null) {
             Logger.debug(this, "scheduler was told to quit...");
             thread.interrupt();
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                Logger.exception(this, "waiting for scheduler loop to finish interrupted", e);
+            }
         }
     }
 

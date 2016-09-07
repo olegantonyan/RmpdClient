@@ -59,6 +59,20 @@ public class Main extends Thread {
         proto.quit();
     }
 
+    public void quit() {
+        Logger.debug(this, "stopping main");
+        if (!isAlive()) {
+            Logger.debug(this, "main is already stopped");
+            return;
+        }
+        interrupt();
+        try {
+            join();
+        } catch (InterruptedException e) {
+            Logger.exception(this, "error waiting for main to finish", e);
+        }
+    }
+
     private void check_previous_crash() {
         if (DefaultUncaughtExceptionHandler.is_after_crash()) {
             new Thread(new ServiceUpload("crash")).start();

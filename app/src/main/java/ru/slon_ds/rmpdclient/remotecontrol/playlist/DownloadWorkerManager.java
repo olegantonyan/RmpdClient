@@ -30,6 +30,11 @@ public class DownloadWorkerManager {
     public synchronized void stop() {
         if (worker != null && worker.isAlive()) {
             worker.interrupt();
+            try {
+                worker.join();
+            } catch (InterruptedException e) {
+                Logger.exception(this, "waiting for download worker to finish interrupted", e);
+            }
         }
     }
 
