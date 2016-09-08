@@ -19,6 +19,7 @@ public class PlayerProxy {
         try {
             return player.execute("is_playing").fetch("result", Boolean.class, false);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             return false;
         }
     }
@@ -27,6 +28,7 @@ public class PlayerProxy {
         try {
             return player.execute("time_pos").fetch("result", Integer.class, 0);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             return 0;
         }
     }
@@ -35,6 +37,7 @@ public class PlayerProxy {
         try {
             return player.execute("percent_pos").fetch("result", Integer.class, 0);
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             return 0;
         }
     }
@@ -53,6 +56,7 @@ public class PlayerProxy {
             }
             return true;
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             return false;
         }
     }
@@ -65,6 +69,7 @@ public class PlayerProxy {
             }
             return true;
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             return false;
         }
     }
@@ -85,6 +90,7 @@ public class PlayerProxy {
             }
             return true;
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             return false;
         }
     }
@@ -99,6 +105,7 @@ public class PlayerProxy {
             }
             return true;
         } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             return false;
         }
     }

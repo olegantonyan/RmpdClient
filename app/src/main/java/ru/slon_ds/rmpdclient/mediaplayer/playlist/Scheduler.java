@@ -69,7 +69,7 @@ public class Scheduler implements Runnable, PlayerGuard.Callback {
             try {
                 thread.join();
             } catch (InterruptedException e) {
-                Logger.exception(this, "waiting for scheduler loop to finish interrupted", e);
+                Thread.currentThread().interrupt();
             }
         }
     }
@@ -85,7 +85,8 @@ public class Scheduler implements Runnable, PlayerGuard.Callback {
         try {
             queue.put(msg);
         } catch (InterruptedException e) {
-            Logger.exception(this, "error putting data into queue", e);
+            Logger.exception(this, "putting data into queue interrupted", e);
+            Thread.currentThread().interrupt();
         }
     }
 
@@ -230,6 +231,7 @@ public class Scheduler implements Runnable, PlayerGuard.Callback {
                 }
             } catch (InterruptedException e) {
                 Logger.warning(this, "scheduler loop interrupted");
+                Thread.currentThread().interrupt();
                 break;
             } catch (Exception e) {
                 Logger.exception(this, "error processing scheduler command", e);

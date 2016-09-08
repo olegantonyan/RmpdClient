@@ -32,7 +32,7 @@ public class SelfUpdate {
         try {
             Thread.sleep(1000); // last breath for other threads
         } catch (InterruptedException e) {
-            // don't care
+            Thread.currentThread().interrupt();
         }
         write_sequence_file(sequence_number);
         try {

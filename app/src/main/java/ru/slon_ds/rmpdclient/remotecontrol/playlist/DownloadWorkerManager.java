@@ -20,7 +20,8 @@ public class DownloadWorkerManager {
             try {
                 worker.join();
             } catch (InterruptedException e) {
-                Logger.exception(this, "error waiting for thread finished", e);
+                Logger.exception(this, "waiting for thread finished interrupted", e);
+                Thread.currentThread().interrupt();
             }
         }
         worker = new DownloadWorker(urls, callback);
@@ -34,6 +35,7 @@ public class DownloadWorkerManager {
                 worker.join();
             } catch (InterruptedException e) {
                 Logger.exception(this, "waiting for download worker to finish interrupted", e);
+                Thread.currentThread().interrupt();
             }
         }
     }

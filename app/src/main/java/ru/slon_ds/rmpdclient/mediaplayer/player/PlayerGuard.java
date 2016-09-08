@@ -86,7 +86,8 @@ public class PlayerGuard extends Handler implements PlayerInterface.Callback {
             try {
                 queue.put(result);
             } catch (InterruptedException e) {
-                Logger.exception(this, "error putting result into queue", e);
+                Logger.exception(this, "putting result into queue interrupted", e);
+                Thread.currentThread().interrupt();
             }
         }
     }

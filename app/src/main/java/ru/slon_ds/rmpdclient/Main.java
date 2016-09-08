@@ -47,6 +47,7 @@ public class Main extends Thread {
                 Thread.sleep(20000);
             } catch (InterruptedException e) {
                 Logger.info(this, "interrupted Main");
+                interrupt();
                 break;
             }
         }
@@ -69,7 +70,8 @@ public class Main extends Thread {
         try {
             join();
         } catch (InterruptedException e) {
-            Logger.exception(this, "error waiting for main to finish", e);
+            Logger.exception(this, "waiting for main to finish interrupted", e);
+            interrupt();
         }
     }
 

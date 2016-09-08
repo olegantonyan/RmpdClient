@@ -67,7 +67,7 @@ public class ControlWrapper implements Runnable {
             try {
                 thread.join();
             } catch (InterruptedException e) {
-                Logger.exception(this, "waiting for control wrapper loop to finish interrupted", e);
+                Thread.currentThread().interrupt();
             }
         }
     }
@@ -94,6 +94,7 @@ public class ControlWrapper implements Runnable {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
                 Logger.warning(this, "control wrapper loop interrupted");
+                Thread.currentThread().interrupt();
                 break;
             }
         }
