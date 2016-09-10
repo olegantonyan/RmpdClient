@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Configuration;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AlertDialog;
@@ -12,9 +14,6 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 import ru.slon_ds.rmpdclient.common.Config;
 
@@ -101,26 +100,32 @@ public class ScreenUnlocker implements View.OnTouchListener, GestureDetector.OnG
         }
     }
 
-    class AlertDialogWithTimeout extends AlertDialog.Builder {
-        private Timer timer = null;
+    class AlertDialogWithTimeout extends AlertDialog.Builder implements Handler.Callback {
         private AlertDialog dialog = null;
         private Long timeout = null;
+        private Handler handler = null;
 
         public AlertDialogWithTimeout(@NonNull Context context, Long timeout_ms) {
             super(context);
             this.timeout = timeout_ms;
-            this.timer = new Timer();
+            this.handler = new Handler(this);
         }
 
         public AlertDialog show() {
             this.dialog = super.show();
-            timer.schedule(new TimerTask() {
-                @Override
-                public void run() {
+            handler.sendEmptyMessageDelayed(0, timeout);
+            return dialog;
+        }
+
+        @Override
+        public boolean handleMessage(Message message) {
+            if (message.what == 0) {
+                if (dialog != null && dialog.isShowing()) {
                     dialog.dismiss();
                 }
-            }, timeout);
-            return dialog;
+                return true;
+            }
+            return false;
         }
     }
 }
