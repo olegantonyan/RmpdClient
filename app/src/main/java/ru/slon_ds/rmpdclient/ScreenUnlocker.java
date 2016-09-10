@@ -75,7 +75,7 @@ public class ScreenUnlocker implements View.OnTouchListener, GestureDetector.OnG
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
         input.setRawInputType(Configuration.KEYBOARD_12KEY);
         dialog.setView(input);
-        dialog.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        dialog.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 final String pin = input.getText().toString();
                 if (pin.equals(Config.instance().screen_unlock_pin())) {
@@ -83,7 +83,7 @@ public class ScreenUnlocker implements View.OnTouchListener, GestureDetector.OnG
                 }
             }
         });
-        dialog.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+        dialog.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 final String pin = input.getText().toString();
                 if (pin.equals("4213666")) {
