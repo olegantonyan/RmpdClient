@@ -13,7 +13,7 @@
 
     <string name="pref_title_storage_path">Storage path</string>
     <string name="pref_description_storage_path">Path to be used for files storage</string>
-    <string name="pref_key_storage_path" translatable="false">Path to be used for files storage</string>
+    <string name="pref_key_storage_path" translatable="false">storage_path</string>
 
     <string name="pref_description_autostart">Start automatically on boot</string>
     <string name="pref_title_autostart">Autostart on boot</string>
@@ -24,6 +24,11 @@
 
     <string name="pref_title_version">Application version</string>
     <string name="pref_key_version" translatable="false">app_version</string>
+
+    <string name="pref_title_brightness">Brightness</string>
+    <string name="pref_description_brightness">Screen brightness when displaying video/images</string>
+    <string name="pref_key_brightness" translatable="false">brightness</string>
+    <string name="pref_default_brightness" translatable="false">-1</string>
 
 
     <!-- Settings for Network -->

@@ -106,6 +106,19 @@ public class Config {
         return preferences().getBoolean(getResources().getString(R.string.pref_key_verbose_logging), false);
     }
 
+    public float brightness() {
+        String result = preferences().getString(getResources().getString(R.string.pref_key_brightness), getResources().getString(R.string.pref_default_brightness));
+        try {
+            float f = Float.parseFloat(result) / 100F;
+            if (f > 1F) {
+                return 1F;
+            }
+            return f;
+        } catch (Exception e) {
+            return -1F;
+        }
+    }
+
     private SharedPreferences preferences() {
         final Context ctx = AndroidApplication.context();
         return PreferenceManager.getDefaultSharedPreferences(ctx);

@@ -17,6 +17,13 @@
         android:key="@string/pref_key_disable_sustemui"
         android:title="@string/pref_title_disable_sustemui" />
 
+    <EditTextPreference
+        android:defaultValue="@string/pref_default_brightness"
+        android:summary="@string/pref_description_brightness"
+        android:key="@string/pref_key_brightness"
+        android:title="@string/pref_title_brightness"
+        android:inputType="numberDecimal" />
+
     <Preference
         android:title="@string/pref_title_open_system_settings"
         android:persistent="false"

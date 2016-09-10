@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.VideoView;
@@ -24,12 +25,17 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LOW_PROFILE);
-        setContentView(R.layout.activity_main);
+        setup_ui();
+        setup_controls();
 
+        if (Config.instance().first_run()) {
+            if (!Config.instance().load_preconfigured()) {
+                launch_settings_activity();
+            }
+        }
+    }
+
+    private void setup_controls() {
         gesture_detector = new GestureDetectorCompat(this, this);
 
         video_view = (VideoView) findViewById(R.id.videoView);
@@ -40,12 +46,20 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         image_view = (ImageView) findViewById(R.id.image_view);
         image_view.requestFocus();
         image_view.setOnTouchListener(this);
+    }
 
-        if (Config.instance().first_run()) {
-            if (!Config.instance().load_preconfigured()) {
-                launch_settings_activity();
-            }
-        }
+    private void setup_ui() {
+        Window window = getWindow();
+        window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_LOW_PROFILE);
+        setContentView(R.layout.activity_main);
+    }
+
+    private void configure_ui() {
+        Window window = getWindow();
+        WindowManager.LayoutParams layout = window.getAttributes();
+        layout.screenBrightness = Config.instance().brightness();
+        window.setAttributes(layout);
     }
 
     private void launch_settings_activity() {
@@ -73,6 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     protected void onStart() {
         super.onStart();
         start_main();
+        configure_ui();
     }
 
     @Override

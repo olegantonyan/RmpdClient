@@ -188,6 +188,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // guidelines.
             final Resources res = getResources();
             bindPreferenceSummaryToValue(findPreference(res.getString(R.string.pref_key_storage_path)));
+            bindPreferenceSummaryToValue(findPreference(res.getString(R.string.pref_key_brightness)));
 
             Preference system_settings = findPreference(res.getString(R.string.pref_key_launch_system_settings));
             system_settings.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
