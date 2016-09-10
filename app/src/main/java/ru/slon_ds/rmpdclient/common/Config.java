@@ -8,8 +8,6 @@ import android.preference.PreferenceManager;
 
 import java.io.FileInputStream;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 import ru.slon_ds.rmpdclient.AndroidApplication;
@@ -54,20 +52,17 @@ public class Config {
             SharedPreferences.Editor editor = preferences().edit();
 
             Field[] fields = R.string.class.getFields();
-            List<String> keys = new ArrayList<>();
             for (Field f : fields) {
                 final String s = f.getName();
                 if (s.startsWith("pref_key_")) {
-                    keys.add(s.replace("pref_key_", ""));
+                    final String key = s.replace("pref_key_", "");
+                    final String value = props.getProperty(key);
+                    if (value != null) {
+                        editor.putString(key, value);
+                    }
                 }
             }
 
-            for (String i : keys) {
-                final String value = props.getProperty(i);
-                if (value != null) {
-                    editor.putString(i, value);
-                }
-            }
             editor.apply();
             return true;
         } catch (Exception e) {
