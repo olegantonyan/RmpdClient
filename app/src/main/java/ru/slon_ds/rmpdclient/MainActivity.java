@@ -41,10 +41,10 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
         image_view.requestFocus();
         image_view.setOnTouchListener(this);
 
-        Config.instance().load_defaults();
-
         if (Config.instance().first_run()) {
-            launch_settings_activity();
+            if (!Config.instance().load_preconfigured()) {
+                launch_settings_activity();
+            }
         }
     }
 
