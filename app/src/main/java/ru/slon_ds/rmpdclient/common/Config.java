@@ -107,7 +107,8 @@ public class Config {
     }
 
     public float brightness() {
-        String result = preferences().getString(getResources().getString(R.string.pref_key_brightness), getResources().getString(R.string.pref_default_brightness));
+        String result = preferences().getString(getResources().getString(R.string.pref_key_brightness),
+                getResources().getString(R.string.pref_default_brightness));
         try {
             float f = Float.parseFloat(result) / 100F;
             if (f > 1F) {
@@ -117,6 +118,11 @@ public class Config {
         } catch (Exception e) {
             return -1F;
         }
+    }
+
+    public String screen_unlock_pin() {
+        return preferences().getString(getResources().getString(R.string.pref_key_screen_unlock_pin), getResources().getString(R.string.pref_default_screen_unlock_pin));
+
     }
 
     private SharedPreferences preferences() {

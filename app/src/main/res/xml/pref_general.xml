@@ -22,7 +22,18 @@
         android:summary="@string/pref_description_brightness"
         android:key="@string/pref_key_brightness"
         android:title="@string/pref_title_brightness"
-        android:inputType="numberDecimal" />
+        android:inputType="numberSigned"
+        android:maxLength="3"
+        android:selectAllOnFocus="true" />
+
+    <EditTextPreference
+        android:defaultValue="@string/pref_default_screen_unlock_pin"
+        android:summary="@string/pref_description_screen_unlock_pin"
+        android:key="@string/pref_key_screen_unlock_pin"
+        android:title="@string/pref_title_screen_unlock_pin"
+        android:inputType="number"
+        android:maxLength="5"
+        android:selectAllOnFocus="true" />
 
     <Preference
         android:title="@string/pref_title_open_system_settings"

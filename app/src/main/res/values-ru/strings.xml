@@ -20,4 +20,7 @@
     <string name="pref_title_version">Версия приложения</string>
     <string name="pref_description_brightness">Яркость экрана показа видео/изображений</string>
     <string name="pref_title_brightness">Яркость</string>
+    <string name="title_screen_unlock_dialog">Разблокироать экран</string>
+    <string name="pref_description_screen_unlock_pin">Код разблокировки основного экрана (для входа в настройки)</string>
+    <string name="pref_title_screen_unlock_pin">Код разблокировки экрана</string>
 </resources>

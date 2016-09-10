@@ -2,10 +2,7 @@ package ru.slon_ds.rmpdclient;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -16,11 +13,11 @@ import ru.slon_ds.rmpdclient.common.Config;
 import ru.slon_ds.rmpdclient.common.Logger;
 import ru.slon_ds.rmpdclient.mediaplayer.player.PlayerGuard;
 
-public class MainActivity extends AppCompatActivity implements View.OnTouchListener, GestureDetector.OnGestureListener {
+public class MainActivity extends AppCompatActivity implements ScreenUnlocker.OnScreenUnlockCallback {
     private Main main = null;
     private VideoView video_view = null;
     private ImageView image_view = null;
-    private GestureDetectorCompat gesture_detector = null;
+    private ScreenUnlocker screen_unlocker = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,16 +33,16 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     private void setup_controls() {
-        gesture_detector = new GestureDetectorCompat(this, this);
+        screen_unlocker = new ScreenUnlocker(this, this);
 
         video_view = (VideoView) findViewById(R.id.videoView);
         video_view.setZOrderOnTop(true);
         video_view.requestFocus();
-        video_view.setOnTouchListener(this);
+        video_view.setOnTouchListener(screen_unlocker);
 
         image_view = (ImageView) findViewById(R.id.image_view);
         image_view.requestFocus();
-        image_view.setOnTouchListener(this);
+        image_view.setOnTouchListener(screen_unlocker);
     }
 
     private void setup_ui() {
@@ -106,42 +103,7 @@ public class MainActivity extends AppCompatActivity implements View.OnTouchListe
     }
 
     @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-        return gesture_detector.onTouchEvent(motionEvent) || super.onTouchEvent(motionEvent);
-    }
-
-    @Override
-    public boolean onDown(MotionEvent motionEvent) {
-        //Logger.info(this, "onDown");
-        return false;
-    }
-
-    @Override
-    public void onShowPress(MotionEvent motionEvent) {
-        //Logger.info(this, "onShowPress");
-    }
-
-    @Override
-    public boolean onSingleTapUp(MotionEvent motionEvent) {
-        //Logger.info(this, "onSingleTapUp");
-        return false;
-    }
-
-    @Override
-    public boolean onScroll(MotionEvent start, MotionEvent current, float x, float y) {
-        //Logger.info(this, String.format("onScroll (%f %f) -> (%f %f)", start.getX(), start.getY(), current.getX(), current.getY()));
-        return false;
-    }
-
-    @Override
-    public void onLongPress(MotionEvent motionEvent) {
-        //Logger.info(this, "onLongPress " + String.valueOf(motionEvent.getX()));
+    public void unlock_screen_event() {
         launch_settings_activity();
-    }
-
-    @Override
-    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
-        //Logger.info(this, "onFling");
-        return false;
     }
 }
