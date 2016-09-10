@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements ScreenUnlocker.On
     }
 
     private void setup_controls() {
-        screen_unlocker = new ScreenUnlocker(this, this, Config.instance().screen_unlock_pin());
+        screen_unlocker = new ScreenUnlocker(this, this);
 
         video_view = (VideoView) findViewById(R.id.videoView);
         video_view.setZOrderOnTop(true);
