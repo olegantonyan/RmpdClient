@@ -195,7 +195,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             system_settings.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    startActivityForResult(new Intent(android.provider.Settings.ACTION_SETTINGS), 0);
+                    startActivity(new Intent(android.provider.Settings.ACTION_SETTINGS));
+                    //  startActivity(new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK));
                     return true;
                 }
             });
