@@ -27,21 +27,6 @@ public class Config {
         load_defaults();
     }
 
-    private void load_defaults() {
-        final Context ctx = AndroidApplication.context();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
-        SharedPreferences.Editor editor = preferences.edit();
-        final Resources res = ctx.getResources();
-        final String pref_key_storage_path = res.getString(R.string.pref_key_storage_path);
-        if (preferences.getString(pref_key_storage_path, null) == null) {
-            editor.putString(pref_key_storage_path, Files.base_storage_path());
-            editor.apply();
-        }
-        PreferenceManager.setDefaultValues(ctx, R.xml.pref_general, false);
-        PreferenceManager.setDefaultValues(ctx, R.xml.pref_network, false);
-        PreferenceManager.setDefaultValues(ctx, R.xml.pref_logging, false);
-    }
-
     public boolean load_preconfigured() {
         try {
             final String path = Environment.getExternalStorageDirectory().getAbsolutePath();
@@ -124,7 +109,8 @@ public class Config {
     }
 
     public String screen_unlock_pin() {
-        return preferences().getString(getResources().getString(R.string.pref_key_screen_unlock_pin), getResources().getString(R.string.pref_default_screen_unlock_pin));
+        return preferences().getString(getResources().getString(R.string.pref_key_screen_unlock_pin),
+                getResources().getString(R.string.pref_default_screen_unlock_pin));
 
     }
 
@@ -136,5 +122,20 @@ public class Config {
     private Resources getResources() {
         final Context ctx = AndroidApplication.context();
         return ctx.getResources();
+    }
+
+    private void load_defaults() {
+        final Context ctx = AndroidApplication.context();
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(ctx);
+        SharedPreferences.Editor editor = preferences.edit();
+        final Resources res = ctx.getResources();
+        final String pref_key_storage_path = res.getString(R.string.pref_key_storage_path);
+        if (preferences.getString(pref_key_storage_path, null) == null) {
+            editor.putString(pref_key_storage_path, Files.base_storage_path());
+            editor.apply();
+        }
+        PreferenceManager.setDefaultValues(ctx, R.xml.pref_general, false);
+        PreferenceManager.setDefaultValues(ctx, R.xml.pref_network, false);
+        PreferenceManager.setDefaultValues(ctx, R.xml.pref_logging, false);
     }
 }

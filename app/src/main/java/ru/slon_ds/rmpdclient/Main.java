@@ -32,9 +32,6 @@ public class Main extends Thread {
 
         check_previous_crash();
 
-        // ShareSettings share_settings = new ShareSettings();
-        // share_settings.start();
-
         new SelfUpdate().verify();
 
         while (!isInterrupted()) {
@@ -52,8 +49,6 @@ public class Main extends Thread {
             }
         }
         Logger.info(this, "finishing main");
-
-        // share_settings.stop();
 
         player.quit();
 

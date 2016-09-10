@@ -109,10 +109,10 @@ public class ScreenUnlocker implements View.OnTouchListener, GestureDetector.OnG
         public AlertDialogWithTimeout(@NonNull Context context, Long timeout_ms) {
             super(context);
             this.timeout = timeout_ms;
+            this.timer = new Timer();
         }
 
         public AlertDialog show() {
-            this.timer = new Timer();
             this.dialog = super.show();
             timer.schedule(new TimerTask() {
                 @Override
